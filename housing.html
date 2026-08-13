@@ -1,0 +1,257 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Housing — Grenoble Exchange OS</title>
+<style>
+:root{
+  --ground:#E8ECEE;--surface:#FBFCFC;--surface-2:#F1F4F5;
+  --ink:#141E27;--ink-2:#41525F;--muted:#75868F;
+  --rule:#CDD6DA;--rule-2:#DFE6E9;
+  --accent:#C13F24;--glacier:#26707E;--ice:#3A6E9E;--moss:#4A6B3A;--warn:#8A5A0C;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --ground:#0E161C;--surface:#151F27;--surface-2:#1B2831;
+  --ink:#E3EAEE;--ink-2:#A8B8C1;--muted:#7B8C96;
+  --rule:#2A3A45;--rule-2:#223039;
+  --accent:#F06742;--glacier:#54AEBE;--ice:#6FA8D6;--moss:#8FB07A;--warn:#D8A93C;
+}}
+:root[data-theme="dark"]{
+  --ground:#0E161C;--surface:#151F27;--surface-2:#1B2831;
+  --ink:#E3EAEE;--ink-2:#A8B8C1;--muted:#7B8C96;
+  --rule:#2A3A45;--rule-2:#223039;
+  --accent:#F06742;--glacier:#54AEBE;--ice:#6FA8D6;--moss:#8FB07A;--warn:#D8A93C;
+}
+*{box-sizing:border-box}
+body{background:var(--ground);color:var(--ink);margin:0;font-size:15px;line-height:1.6;
+  font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;-webkit-font-smoothing:antialiased}
+img{max-width:100%;display:block}
+.mono{font-family:ui-monospace,"SF Mono",SFMono-Regular,Menlo,Consolas,monospace;font-variant-numeric:tabular-nums}
+.wrap{max-width:1060px;margin:0 auto;padding:0 20px}
+a{color:var(--accent)}
+nav{position:sticky;top:0;z-index:30;background:var(--surface);border-bottom:1px solid var(--rule);overflow-x:auto}
+nav div{max-width:1060px;margin:0 auto;padding:11px 20px;display:flex;gap:20px;white-space:nowrap}
+nav a{font-family:ui-monospace,Menlo,monospace;font-size:11px;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--ink-2);text-decoration:none;padding-bottom:2px;border-bottom:2px solid transparent}
+nav a:hover,nav a:focus-visible{color:var(--accent);border-bottom-color:var(--accent);outline:none}
+nav a.on{color:var(--accent);border-bottom-color:var(--accent)}
+
+.hero{position:relative;margin-top:0;border-bottom:2px solid var(--ink)}
+.hero-img{width:100%;height:clamp(210px,34vw,380px);object-fit:cover;filter:saturate(.92)}
+.hero-cap{position:absolute;inset:auto 0 0 0;padding:26px 0 20px;
+  background:linear-gradient(to top,rgba(6,12,17,.92),rgba(6,12,17,.55) 55%,transparent)}
+.hero-cap .wrap{color:#fff}
+.eyebrow{font-family:ui-monospace,Menlo,monospace;font-size:11px;letter-spacing:.18em;
+  text-transform:uppercase;color:#F2A38C;margin:0 0 9px}
+h1{font-size:clamp(28px,4.6vw,46px);line-height:1.03;letter-spacing:-.028em;font-weight:700;margin:0;
+  text-wrap:balance;color:#fff}
+.hero-sub{color:#D6E0E6;margin:10px 0 0;max-width:60ch;font-size:15px}
+
+h2{font-size:clamp(20px,2.7vw,27px);letter-spacing:-.02em;margin:0 0 4px;font-weight:700;text-wrap:balance}
+section{padding:46px 0;border-bottom:1px solid var(--rule)}
+.sec-no{font-family:ui-monospace,Menlo,monospace;font-size:11px;letter-spacing:.16em;
+  text-transform:uppercase;color:var(--muted);margin:0 0 10px}
+.lede{color:var(--ink-2);max-width:66ch;margin:10px 0 24px}
+
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));border:1px solid var(--rule);margin:18px 0 6px}
+.stats>div{padding:15px 17px;border-right:1px solid var(--rule-2)}
+.stats>div:last-child{border-right:none}
+.stats .lab{font-family:ui-monospace,Menlo,monospace;font-size:10px;letter-spacing:.13em;
+  text-transform:uppercase;color:var(--muted)}
+.stats .v{font-family:ui-monospace,Menlo,monospace;font-size:22px;font-weight:600;letter-spacing:-.02em;margin-top:3px}
+.stats p{margin:4px 0 0;font-size:12.5px;color:var(--ink-2)}
+
+/* day cards */
+.day{display:grid;grid-template-columns:190px 1fr;gap:0;border:1px solid var(--rule);margin-bottom:14px;
+  background:var(--surface);overflow:hidden}
+.day img{width:100%;height:100%;min-height:150px;object-fit:cover}
+.day-body{padding:15px 18px}
+.day-head{display:flex;flex-wrap:wrap;gap:10px;align-items:baseline;margin-bottom:5px}
+.day-date{font-family:ui-monospace,Menlo,monospace;font-size:12px;color:var(--accent);font-weight:600}
+.day-city{font-size:17px;font-weight:700;letter-spacing:-.015em}
+.day-country{font-family:ui-monospace,Menlo,monospace;font-size:10px;letter-spacing:.1em;
+  text-transform:uppercase;color:var(--muted)}
+.day-body p{margin:0 0 9px;font-size:14px;color:var(--ink-2)}
+.meta{display:flex;flex-wrap:wrap;gap:7px}
+.chip{display:inline-block;font-family:ui-monospace,Menlo,monospace;font-size:10px;letter-spacing:.07em;
+  text-transform:uppercase;padding:2px 7px;border:1px solid currentColor;white-space:nowrap}
+.c-free{color:var(--moss)}.c-res{color:var(--warn)}.c-no{color:var(--accent)}
+.c-bed{color:var(--glacier)}.c-cost{color:var(--ink-2)}
+
+/* trip cards on the hub */
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px;margin-top:22px}
+.card{border:1px solid var(--rule);background:var(--surface);text-decoration:none;color:inherit;
+  display:flex;flex-direction:column;transition:border-color .16s}
+.card:hover,.card:focus-visible{border-color:var(--accent);outline:none}
+.card img{width:100%;height:172px;object-fit:cover}
+.card-b{padding:16px 18px;display:flex;flex-direction:column;gap:7px;flex:1}
+.card h3{margin:0;font-size:19px;letter-spacing:-.02em}
+.card .when{font-family:ui-monospace,Menlo,monospace;font-size:11px;color:var(--accent);letter-spacing:.04em}
+.card p{margin:0;font-size:13.5px;color:var(--ink-2);flex:1}
+.card .foot{display:flex;justify-content:space-between;font-family:ui-monospace,Menlo,monospace;
+  font-size:11px;color:var(--muted);border-top:1px solid var(--rule-2);padding-top:9px;margin-top:3px}
+
+/* photo strip */
+.strip{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px;margin:18px 0}
+.strip figure{margin:0;position:relative;overflow:hidden}
+.strip img{width:100%;height:132px;object-fit:cover}
+.strip figcaption{position:absolute;inset:auto 0 0 0;padding:16px 9px 6px;color:#fff;font-size:11px;
+  font-family:ui-monospace,Menlo,monospace;letter-spacing:.05em;
+  background:linear-gradient(to top,rgba(6,12,17,.9),transparent)}
+
+table{width:100%;border-collapse:collapse;font-size:14px;margin:14px 0}
+.scroll{overflow-x:auto}
+th{text-align:left;font-family:ui-monospace,Menlo,monospace;font-size:10px;letter-spacing:.13em;
+  text-transform:uppercase;color:var(--muted);font-weight:400;padding:0 12px 8px 0;
+  border-bottom:1px solid var(--rule);vertical-align:bottom}
+td{padding:10px 12px 10px 0;border-bottom:1px solid var(--rule-2);vertical-align:top}
+td.num,th.num{text-align:right;font-family:ui-monospace,Menlo,monospace;font-variant-numeric:tabular-nums;padding-right:0}
+tr.tot td{border-top:2px solid var(--ink);border-bottom:none;font-weight:700;padding-top:11px}
+.sm{font-size:12.5px;color:var(--muted);display:block;margin-top:2px}
+
+.verdict{border:1px solid var(--glacier);padding:17px 20px;margin:20px 0;background:var(--surface-2)}
+.verdict .lab{font-family:ui-monospace,Menlo,monospace;font-size:10px;letter-spacing:.15em;
+  text-transform:uppercase;color:var(--glacier);margin-bottom:6px}
+.verdict p{margin:0;font-size:14.5px}.verdict p+p{margin-top:9px}
+.warnbox{border-left:3px solid var(--warn);background:var(--surface-2);padding:15px 19px;margin:18px 0;font-size:14px;color:var(--ink-2)}
+.warnbox strong{color:var(--ink)}
+ul{padding-left:19px}li{margin-bottom:6px;color:var(--ink-2)}li strong{color:var(--ink)}
+footer{padding:30px 0 66px;font-size:12px;color:var(--muted)}
+@media (max-width:620px){ .day{grid-template-columns:1fr} .day img{height:170px;min-height:0} }
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style></head><body>
+<nav><div><a href="index.html">The OS</a><a href="trips.html">Trips</a><a href="trip-belt.html">Central Belt</a><a href="trip-iceland.html">Iceland</a><a href="trip-iberia.html">Iberia</a><a href="trip-weekends.html">Weekends</a><a href="housing.html" class="on">Housing</a><a href="budget.html">Costs</a></div></nav>
+<div class="hero">
+  <img class="hero-img" src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/23/Panorama_grenoble.png/1280px-Panorama_grenoble.png" alt="" loading="eager">
+  <div class="hero-cap"><div class="wrap">
+    <p class="eyebrow">74 nights · 5 October – 18 December 2026</p><h1>Somewhere to sleep,<br>for two and a half months</h1><p class="hero-sub">The shortlist, the free state guarantor nobody applies for early enough, and the lease type that makes a short stay legal.</p>
+  </div></div>
+</div>
+<main class="wrap">
+
+<section>
+  <p class="sec-no">§ — The constraint nobody tells you about</p>
+  <h2>Your problem isn't price. It's that you only need 74 nights.</h2>
+  <p class="lede">Standard French leases run nine to twelve months. You need <strong>5 October to 18
+  December</strong> — two and a half months, starting after the academic year's housing has already been
+  allocated in June and July. Most residences will simply refuse the dates before anyone discusses money.
+  That is the filter to solve first.</p>
+  <div class="stats"><div><span class="lab">Nights needed</span><div class="v">74</div><p>5 Oct – 18 Dec. Term ends before Christmas.</p></div><div><span class="lab">Realistic budget</span><div class="v">€450–650</div><p>Per month. GEM's own estimate is €450–850.</p></div><div><span class="lab">Guarantor cost</span><div class="v">€0</div><p>Visale is free and state-backed. Never pay an agency for one.</p></div><div><span class="lab">Best walk to campus</span><div class="v">2 min</div><p>Same street as GEM. See below.</p></div></div>
+  <div class="verdict"><p class="lab">The lease type that solves it</p>
+  <p><strong>Ask for a « bail mobilité » by name.</strong> It's a French lease category built for exactly your
+  situation: <strong>one to ten months</strong>, furnished, for students and people on temporary assignment.
+  Two things make it decisive — the landlord cannot legally demand a security deposit on one, and Visale
+  covers it.</p>
+  <p>Most listings won't advertise it. Ask anyway. A landlord facing an empty flat from October will often
+  agree to a mobility lease when a nine-month contract was never going to happen.</p></div>
+</section>
+
+<section>
+  <p class="sec-no">§ — The shortlist, ranked</p>
+  <h2>Six channels, best first</h2>
+
+  <div class="scroll"><table>
+  <tr><th>#</th><th>Option</th><th>Price</th><th>Why it ranks here</th></tr>
+
+  <tr><td class="mono">1</td>
+  <td><strong>Les Estudines Europole</strong><span class="sm">2/4 rue Pierre Sémard, 38000 Grenoble · +33 (0)9 69 39 08 98</span></td>
+  <td class="mono">from €510/mo<span class="sm">deposit 1 month</span></td>
+  <td><strong>GEM Sémard is at number 12 of the same street.</strong> You would walk to class in about two
+  minutes and to Grenoble Gare in three — and you are planning roughly twenty weekend departures from that
+  station. It also accepts stays of <strong>1 to 7 months</strong>, which resolves the whole lease problem.
+  Confirm autumn 2026 availability by phone; the published offer window is quoted per season.</td></tr>
+
+  <tr><td class="mono">2</td>
+  <td><strong>Studapart</strong><span class="sm">GEM's official housing partner</span></td>
+  <td class="mono">€450–850/mo</td>
+  <td>The school's own channel, so listings expect exchange students and short terms. Carries the
+  <strong>Studapart Guarantee</strong>, which substitutes for a French guarantor, and issues housing
+  certificates. Largest inventory of the lot — studios, flatshares, rooms in private homes.
+  Ask GEM for your school access code; the partner rates sit behind it.</td></tr>
+
+  <tr><td class="mono">3</td>
+  <td><strong>Colocation &amp; outgoing-student sublets</strong><span class="sm">GEM networks, ESN Grenoble, student groups</span></td>
+  <td class="mono">€350–450/mo</td>
+  <td><strong>The underrated one.</strong> GEM's own French students leave on <em>their</em> exchanges in the
+  autumn, vacating rooms across exactly your window. No agency fee, no folder fee, usually no guarantor, and
+  the cheapest rents in the city. Ask the exchange office directly and get into the student WhatsApp groups
+  before September.</td></tr>
+
+  <tr><td class="mono">4</td>
+  <td><strong>Cardinal Campus</strong><span class="sm">several Grenoble residences</span></td>
+  <td class="mono">from €445/mo</td>
+  <td>Furnished, student-focused, and their T2 apartments are designed for flatsharing — relevant if you and
+  one other person split. Cheapest of the formal residences.</td></tr>
+
+  <tr><td class="mono">5</td>
+  <td><strong>Studéa Grenoble Centre</strong><span class="sm">Nexity · studios 17–33 m²</span></td>
+  <td class="mono">€540/mo<span class="sm">+ €350 file fee, €310 deposit</span></td>
+  <td>Lists October 2026 availability. But run the file fee over a short stay before you sign:
+  <strong>€350 spread over 2.5 months is an effective €140/month surcharge</strong>, which quietly makes this
+  the most expensive residence on the list rather than the mid-priced one it appears to be.</td></tr>
+
+  <tr><td class="mono">6</td>
+  <td><strong>The Europole 1 Airbnb</strong><span class="sm">your benchmark, not your default</span></td>
+  <td class="mono">≈€1,359/mo<span class="sm">whole unit</span></td>
+  <td>At three sharing that's <strong>€453 each</strong> — market rate, with zero bureaucracy and no guarantor
+  needed. At one or two people it's poor value. Keep it as the fallback that means you never arrive homeless,
+  and negotiate the others against it. Re-quote it for 5 Oct – 18 Dec; the dates on the listing are wrong.</td></tr>
+  </table></div>
+</section>
+
+<section>
+  <p class="sec-no">§ — The guarantor problem</p>
+  <h2>Visale is free. Never pay for a guarantor.</h2>
+  <p class="lede">Almost every French landlord wants a <em>garant</em> — someone French, salaried and liable
+  for your rent. You don't have one. The state solved this and it costs nothing.</p>
+  <ul>
+    <li><strong>Visale covers you.</strong> Free, state-backed, open to international students aged 18–30
+    regardless of income. You qualify: you have a long-stay student visa (VLS-TS « étudiant »), which is the
+    condition for non-EU applicants.</li>
+    <li><strong>Apply now, not when you find a flat.</strong> The eligibility certificate takes
+    <strong>2 to 15 days</strong>, and <strong>you must hold it before signing.</strong> Turning up to a
+    viewing without one is how people lose flats to the next applicant. Apply at visale.fr.</li>
+    <li><strong>The 2026 reform raised the ceilings</strong> — roughly €840/month in larger cities and €680
+    elsewhere. Grenoble student rents sit comfortably under either, so this won't bite.</li>
+    <li><strong>Studapart's own guarantee</strong> is the alternative if a landlord won't take Visale. It's
+    bundled into their platform and paid, so treat it as the fallback rather than the default.</li>
+  </ul>
+  <div class="warnbox"><strong>Don't bother with CAF housing benefit.</strong> Standard advice for exchange
+  students, and wrong for you: APL applications take two to three months to process and your entire lease is
+  two and a half. You would complete the paperwork after flying home. Skip it and spend the hours on the
+  Iceland car instead.</div>
+</section>
+
+<section>
+  <p class="sec-no">§ — Where in the city</p>
+  <h2>Live near the station, not near the nightlife</h2>
+  <p class="lede">A normal exchange student should optimise for bars. You should optimise for
+  <strong>Grenoble Gare</strong> — because eleven weekend windows plus day trips means something like twenty
+  departures and twenty returns, most of them on a Friday evening when you're tired and it's dark.</p>
+  <div class="scroll"><table>
+  <tr><th>District</th><th>To GEM</th><th>Character</th><th>Verdict</th></tr>
+  <tr><td><strong>Europole</strong></td><td class="mono">2–5 min walk</td><td>Business district wrapped around the station and the campus. Quiet at night.</td><td><strong>Best for you.</strong> Walk to class, walk to every train.</td></tr>
+  <tr><td><strong>Berriat / Saint-Bruno</strong></td><td class="mono">10 min walk</td><td>The student quarter — cheap, lively, a proper market.</td><td>Best balance of price and life. Still walkable to the station.</td></tr>
+  <tr><td><strong>Hyper-centre</strong><span class="sm">Victor Hugo, Notre-Dame</span></td><td class="mono">15 min walk</td><td>Old town, shops, restaurants.</td><td>Nicest to live in, priciest, slightly further from the trains.</td></tr>
+  <tr><td><strong>Saint-Martin-d'Hères</strong></td><td class="mono">30–40 min tram</td><td>The university campus. Cheapest rents in the area.</td><td><strong>Avoid.</strong> It serves the other university. You'd commute away from both GEM and the station.</td></tr>
+  </table></div>
+</section>
+
+<section>
+  <p class="sec-no">§ — This week</p>
+  <h2>Five moves, in this order</h2>
+  <div class="scroll"><table>
+  <tr><th>#</th><th>Do this</th><th>Why now</th></tr>
+  <tr><td class="mono">1</td><td><strong>Apply for Visale at visale.fr</strong></td><td>Free, takes 2–15 days, and you cannot sign anything without it. Zero reason to wait — it costs nothing and expires slowly.</td></tr>
+  <tr><td class="mono">2</td><td><strong>Email GEM housing</strong> for your Studapart access code <em>and</em> ask explicitly about autumn sublets from outgoing French students</td><td>The sublet question is the one nobody asks, and it's where the cheap rooms are.</td></tr>
+  <tr><td class="mono">3</td><td><strong>Phone Les Estudines Europole</strong> about 5 Oct – 18 Dec</td><td>Phone, don't email. It's the best-located building in the city for your situation and short stays are their model.</td></tr>
+  <tr><td class="mono">4</td><td><strong>Re-quote the Airbnb</strong> for the real dates, and find out who's sharing</td><td>It's your insurance against arriving with nowhere to go. Its value swings entirely on whether two or three of you split it.</td></tr>
+  <tr><td class="mono">5</td><td><strong>Cancel the visa apartment before 7 September, 23:59</strong></td><td>Unrelated to finding a home, but it's €5,285 and the clock is the shortest one you have.</td></tr>
+  </table></div>
+  <div class="verdict"><p class="lab">If you do only one thing</p>
+  <p><strong>Apply for Visale today and phone Les Estudines tomorrow.</strong> The guarantee is free and takes
+  a fortnight at worst, so starting it costs you nothing and not starting it blocks every option on this page.
+  And a room on the same street as your campus, three minutes from the station you'll leave from twenty times,
+  is worth more to this particular semester than saving €60 a month somewhere across the tram line.</p></div>
+</section>
+<footer>Photographs from Wikimedia Commons under their respective licences. Costs are per person, hostel dorms or shared rooms, booked three or more weeks ahead — planning estimates, not quotes. Rail costs are reservation fees only; the Eurail Global Pass (3-month continuous) covers the seat itself.</footer>
+</main></body></html>
