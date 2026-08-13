@@ -1,0 +1,482 @@
+<title>Semester OS — Grenoble Fall 2026</title>
+<style>
+  :root{
+    --ground:#E8ECEE; --surface:#FBFCFC; --surface-2:#F1F4F5; --surface-3:#E3E9EB;
+    --ink:#141E27; --ink-2:#41525F; --muted:#75868F;
+    --rule:#CDD6DA; --rule-2:#DFE6E9;
+    --accent:#C13F24; --glacier:#26707E; --moss:#4A6B3A; --ice:#3A6E9E;
+    --warn:#8A5A0C; --warn-bg:#F7EEDC; --danger:#A32718; --danger-bg:#F8E4E1;
+  }
+  @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+    --ground:#0E161C; --surface:#151F27; --surface-2:#1B2831; --surface-3:#22323D;
+    --ink:#E3EAEE; --ink-2:#A8B8C1; --muted:#7B8C96;
+    --rule:#2A3A45; --rule-2:#223039;
+    --accent:#F06742; --glacier:#54AEBE; --moss:#8FB07A; --ice:#6FA8D6;
+    --warn:#D8A93C; --warn-bg:#2A2214; --danger:#F0705C; --danger-bg:#2E1714;
+  }}
+  :root[data-theme="dark"]{
+    --ground:#0E161C; --surface:#151F27; --surface-2:#1B2831; --surface-3:#22323D;
+    --ink:#E3EAEE; --ink-2:#A8B8C1; --muted:#7B8C96;
+    --rule:#2A3A45; --rule-2:#223039;
+    --accent:#F06742; --glacier:#54AEBE; --moss:#8FB07A; --ice:#6FA8D6;
+    --warn:#D8A93C; --warn-bg:#2A2214; --danger:#F0705C; --danger-bg:#2E1714;
+  }
+  *{box-sizing:border-box}
+  body{background:var(--ground);color:var(--ink);margin:0;font-size:15px;line-height:1.6;
+    font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;-webkit-font-smoothing:antialiased}
+  .mono,code{font-family:ui-monospace,"SF Mono",SFMono-Regular,Menlo,Consolas,monospace;font-variant-numeric:tabular-nums}
+  .wrap{max-width:1040px;margin:0 auto;padding:0 20px}
+  a{color:var(--accent)}
+
+  header{padding:52px 0 30px;border-bottom:2px solid var(--ink)}
+  .eyebrow{font-family:ui-monospace,Menlo,monospace;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--accent);margin:0 0 14px}
+  h1{font-size:clamp(32px,5.2vw,52px);line-height:1.02;letter-spacing:-.03em;font-weight:700;margin:0;text-wrap:balance}
+  .sub{color:var(--ink-2);margin:14px 0 0;max-width:64ch;font-size:16px}
+
+  nav{position:sticky;top:0;z-index:30;background:var(--surface);border-bottom:1px solid var(--rule);overflow-x:auto}
+  nav div{max-width:1040px;margin:0 auto;padding:11px 20px;display:flex;gap:20px;white-space:nowrap}
+  nav a{font-family:ui-monospace,Menlo,monospace;font-size:11px;letter-spacing:.1em;text-transform:uppercase;
+    color:var(--ink-2);text-decoration:none;padding-bottom:2px;border-bottom:2px solid transparent}
+  nav a:hover,nav a:focus-visible{color:var(--accent);border-bottom-color:var(--accent);outline:none}
+
+  h2{font-size:clamp(21px,2.9vw,29px);letter-spacing:-.02em;margin:0 0 4px;font-weight:700;text-wrap:balance}
+  section{padding:52px 0;border-bottom:1px solid var(--rule)}
+  .sec-no{font-family:ui-monospace,Menlo,monospace;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin:0 0 10px}
+  .lede{color:var(--ink-2);max-width:66ch;margin:10px 0 26px}
+
+  /* timeline bar */
+  .tl{display:flex;height:52px;border:1px solid var(--rule);margin:8px 0 10px;overflow:hidden}
+  .tl div{display:flex;flex-direction:column;justify-content:center;padding:0 11px;color:#fff;
+    font-family:ui-monospace,Menlo,monospace;font-size:10px;line-height:1.35;overflow:hidden}
+  .tl b{font-size:11px;letter-spacing:.04em}
+  .tl-key{display:flex;flex-wrap:wrap;gap:16px;font-family:ui-monospace,Menlo,monospace;font-size:11px;color:var(--muted)}
+  .tl-key span::before{content:"";display:inline-block;width:9px;height:9px;margin-right:6px}
+
+  /* alert blocks */
+  .alert{border-left:3px solid var(--danger);background:var(--danger-bg);padding:16px 20px;margin:0 0 14px}
+  .alert.warn{border-left-color:var(--warn);background:var(--warn-bg)}
+  .alert.ok{border-left-color:var(--glacier);background:var(--surface-2)}
+  .alert h3{margin:0 0 6px;font-size:16px}
+  .alert p{margin:0;color:var(--ink-2);font-size:14px}
+  .alert p+p{margin-top:8px}
+  .when{font-family:ui-monospace,Menlo,monospace;font-size:10px;letter-spacing:.13em;text-transform:uppercase;color:var(--danger);display:block;margin-bottom:5px}
+  .alert.warn .when{color:var(--warn)} .alert.ok .when{color:var(--glacier)}
+
+  table{width:100%;border-collapse:collapse;font-size:14px;margin:14px 0}
+  .scroll{overflow-x:auto;-webkit-overflow-scrolling:touch}
+  th{text-align:left;font-family:ui-monospace,Menlo,monospace;font-size:10px;letter-spacing:.13em;
+    text-transform:uppercase;color:var(--muted);font-weight:400;padding:0 12px 8px 0;border-bottom:1px solid var(--rule);vertical-align:bottom}
+  td{padding:10px 12px 10px 0;border-bottom:1px solid var(--rule-2);vertical-align:top}
+  td.num,th.num{text-align:right;font-family:ui-monospace,Menlo,monospace;font-variant-numeric:tabular-nums;padding-right:0}
+  tr.tot td{border-top:2px solid var(--ink);border-bottom:none;font-weight:700;padding-top:11px}
+  .d{font-family:ui-monospace,Menlo,monospace;font-size:12px;color:var(--accent);white-space:nowrap}
+  .sm{font-size:12.5px;color:var(--muted);display:block;margin-top:2px}
+
+  .chip{display:inline-block;font-family:ui-monospace,Menlo,monospace;font-size:10px;letter-spacing:.08em;
+    text-transform:uppercase;padding:2px 7px;border:1px solid currentColor;white-space:nowrap}
+  .c-free{color:var(--moss)} .c-res{color:var(--warn)} .c-no{color:var(--danger)} .c-ice{color:var(--ice)}
+
+  .cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(255px,1fr));gap:0;border:1px solid var(--rule);margin:18px 0}
+  .cols>div{padding:16px 18px;border-right:1px solid var(--rule-2)}
+  .cols>div:last-child{border-right:none}
+  .cols .lab{font-family:ui-monospace,Menlo,monospace;font-size:10px;letter-spacing:.13em;text-transform:uppercase;color:var(--muted)}
+  .cols .v{font-family:ui-monospace,Menlo,monospace;font-size:23px;font-weight:600;letter-spacing:-.02em;margin:3px 0 5px}
+  .cols p{margin:0;font-size:13px;color:var(--ink-2)}
+
+  .verdict{border:1px solid var(--glacier);padding:18px 20px;margin:20px 0;background:var(--surface-2)}
+  .verdict .lab{font-family:ui-monospace,Menlo,monospace;font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:var(--glacier);margin-bottom:6px}
+  .verdict p{margin:0;font-size:14.5px}
+  .verdict p+p{margin-top:9px}
+
+  ul{padding-left:19px;margin:10px 0} li{margin-bottom:6px;color:var(--ink-2)}
+  li strong{color:var(--ink)}
+  .bar{height:22px;display:flex;border:1px solid var(--rule);margin:6px 0 3px;overflow:hidden}
+  .bar i{display:block;height:100%}
+  footer{padding:34px 0 70px;font-size:12.5px;color:var(--muted)}
+  @media (max-width:640px){ .tl{height:auto;flex-direction:column} .tl div{padding:8px 11px} }
+  @media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+
+<header class="wrap">
+  <p class="eyebrow">Rochak Jain · Grenoble École de Management · 11 Sep – 22 Dec 2026</p>
+  <h1>103 days, six phases,<br>one 35-kilo constraint.</h1>
+  <p class="sub">Everything below is built from real documents — the Emirates ticket, the GEM timetable,
+  your Eurail pass and the 35/40 kg baggage split. Where a number is an estimate, it says so.</p>
+</header>
+
+<nav><div>
+  <a href="#now">Act this week</a><a href="#shape">The shape</a><a href="#belt">Phase 1 · Belt</a>
+  <a href="#iceland">Phase 2 · Iceland</a><a href="#grenoble">Phase 3 · Grenoble</a>
+  <a href="#pack">Packing</a><a href="#rte">Jain food</a><a href="#money">Money &amp; SIM</a><a href="#rail">Eurail</a>
+</div></nav>
+
+<main class="wrap">
+
+<section id="now">
+  <p class="sec-no">§ 00 — Do these before anything else</p>
+  <h2>Four things are on a clock</h2>
+  <p class="lede">Two of them cost real money if missed. Everything else in this document can wait a week; these cannot.</p>
+
+  <div class="alert">
+    <span class="when">Deadline · Mon 7 September, 23:59 — 26 days</span>
+    <h3>Cancel the visa apartment or you will be charged €5,285</h3>
+    <p>The apartment booking was made as visa proof, not as a real stay. Its terms are explicit:
+    <strong>free until 7 Sep 23:59, then €5,285.04 becomes payable.</strong> A booking made for a visa is still a
+    live commercial contract — it does not lapse because its purpose is served.</p>
+    <p>Cancel it the day your visa is stamped in hand and you are certain no consulate re-check is coming.
+    Tell Shantanu and Aryan today — the liability is joint and one person forgetting costs everyone.</p>
+  </div>
+
+  <div class="alert">
+    <span class="when">Blocking · this week</span>
+    <h3>You have no accommodation in Grenoble for 74 nights</h3>
+    <p>Term runs <strong>5 Oct – 18 Dec</strong> and nothing is booked. October is the worst month to look:
+    French students have already taken the market in August. Go straight to the channels that hold stock for
+    exchange students — GEM's housing service, <strong>Studapart</strong> (GEM partners with it), CROUS,
+    Cardinal Campus, Nexity Studea — rather than open-market listings.</p>
+    <p>Budget €450–650/month for a studio, €350–450 sharing. A <strong>garant</strong> (French guarantor) is
+    usually demanded; the state scheme <strong>Visale</strong> is free and accepts exchange students — apply
+    before you need it, not during a viewing.</p>
+  </div>
+
+  <div class="alert warn">
+    <span class="when">Structural · decide before you book Phase 1</span>
+    <h3>You cannot carry 35 kg for 23 days across six countries and Iceland</h3>
+    <p>You land 11 Sep and don't reach Grenoble until 4–5 Oct. That's <strong>23 days of movement with a
+    semester's luggage</strong> — including Icelandic wind and a Wizz Air cabin allowance. Split it: one
+    23 kg case goes into storage, one ~12 kg backpack travels.</p>
+    <p>Store it <strong>in Paris</strong>, not Grenoble. Your Iceland exit flies KEF→CDG, so you collect the
+    bag on 3–4 Oct on your way through and take the TGV down. Bounce or Nannybag near Gare de Lyon run
+    ~€6–7/day → <strong>≈€150 for 23 days</strong>, cheaper and simpler than paying four extra nights of
+    Grenoble rent to drop it early.</p>
+  </div>
+
+  <div class="alert ok">
+    <span class="when">Correction · from your ticket</span>
+    <h3>You land on the 11th, not the 10th</h3>
+    <p>EK567 leaves Bengaluru <strong>21:00 on 10 Sep</strong> and EK071 puts you into
+    <strong>CDG at 09:20 on Friday 11 September</strong>. Phase 1 is 14 days, not 15 — worth knowing before
+    you build an itinerary one day too long.</p>
+  </div>
+</section>
+
+<section id="shape">
+  <p class="sec-no">§ 01 — The shape of the semester</p>
+  <h2>Six phases, and only two of them are yours to design</h2>
+
+  <div class="tl">
+    <div style="flex:14;background:var(--accent)"><b>PHASE 1 · 14d</b>Central belt<br>11–24 Sep</div>
+    <div style="flex:9;background:var(--ice)"><b>PHASE 2 · 9d</b>Iceland<br>25 Sep–3 Oct</div>
+    <div style="flex:2;background:var(--muted)"><b>MOVE</b>3–4 Oct</div>
+    <div style="flex:74;background:var(--glacier)"><b>PHASE 3 · 74 nights</b>Grenoble term — 11 weekend windows<br>5 Oct – 18 Dec</div>
+    <div style="flex:4;background:var(--moss)"><b>4d</b>Wrap<br>18–22 Dec</div>
+  </div>
+  <div class="cols">
+    <div><span class="lab">Free-travel days</span><div class="v">23</div><p>Before term even starts — more than most exchange students get all semester.</p></div>
+    <div><span class="lab">Weekend windows</span><div class="v">11</div><p>Fri evening → Monday night, since Mondays are free ~80% of the time.</p></div>
+    <div><span class="lab">Countries reachable</span><div class="v">6+</div><p>In Phase 1 alone, nearly all of it reservation-free on your pass.</p></div>
+    <div><span class="lab">Eurail expiry</span><div class="v">~10 Dec</div><p>3-month continuous, activated 11 Sep. Your last two windows fall outside it — see §&nbsp;08.</p></div>
+  </div>
+</section>
+
+<section id="belt">
+  <p class="sec-no">§ 02 — Phase 1 · 11–24 September</p>
+  <h2>Central belt, not the Nordics — and the reason is your pass</h2>
+  <p class="lede">You asked whether Finland–Norway–Sweden could work as the opener. It can, but it shouldn't,
+  and the deciding factor isn't hostel prices — it's seat reservations.</p>
+
+  <div class="scroll"><table>
+    <tr><th>Factor</th><th>Central belt · DE·AT·HU·CZ·PL</th><th>Nordic belt · FI·NO·SE</th></tr>
+    <tr><td><strong>Eurail reservations</strong></td>
+      <td><span class="chip c-free">mostly free</span><span class="sm">German ICE, Austrian/Hungarian Railjet, Czech and Polish intercity — walk on, sit down. Your pass is genuinely unlimited here.</span></td>
+      <td><span class="chip c-res">€10–30 each</span><span class="sm">Norwegian and Swedish long-distance are compulsory-reservation with small pass quotas that sell out.</span></td></tr>
+    <tr><td><strong>Bed, hostel dorm</strong></td><td class="num">€18–30</td><td class="num">€40–65</td></tr>
+    <tr><td><strong>Food per day</strong></td><td class="num">€12–22</td><td class="num">€30–45</td></tr>
+    <tr><td><strong>Countries in 14 days</strong></td><td class="num">6–7</td><td class="num">3</td></tr>
+    <tr><td><strong>Transit time</strong></td><td>2–4h hops, cities close together</td><td>6–10h legs, vast empty distances</td></tr>
+    <tr><td><strong>Exit to Iceland</strong></td><td>Gdańsk → KEF, Wizz, 9×/week, ~4h15</td><td>Oslo/Helsinki → KEF, fine but pricier</td></tr>
+    <tr class="tot"><td>14-day estimate</td><td class="num">€850–1,150</td><td class="num">€2,100–2,800</td></tr>
+  </table></div>
+
+  <div class="verdict">
+    <p class="lab">Verdict</p>
+    <p><strong>Take the central belt.</strong> It costs roughly a third as much, covers twice the countries,
+    and — the real argument — it is the one region where a Eurail pass behaves like the thing it's sold as.
+    In Germany, Austria, Hungary and Czechia you board without paying anything further. In Norway and Sweden
+    you'd pay a reservation fee on nearly every leg, which is renting a pass you already own.</p>
+    <p>The Nordics are also the wrong season. Late September is past the midnight sun and before reliable
+    aurora — and <strong>Iceland already delivers the Nordic experience</strong>, better, in Phase 2.
+    Doing both is paying twice for one thing.</p>
+  </div>
+
+  <h3 style="margin-top:34px;font-size:17px">The route — built around Oktoberfest, not into it</h3>
+  <p class="lede" style="margin-bottom:14px"><strong>Oktoberfest 2026 runs 19 Sep – 4 Oct.</strong> Munich beds
+  go 3–4× from the 19th. This route puts you in Munich on the 13th–15th, out of Bavaria before the surge,
+  and moving east through cheaper countries as the fortnight goes on.</p>
+
+  <div class="scroll"><table>
+    <tr><th>Date</th><th>Move</th><th>Rail</th><th>Sleep</th><th class="num">Est. €</th></tr>
+    <tr><td class="d">Fri 11</td><td>Land CDG 09:20 · store the big bag · <strong>do not travel today</strong><span class="sm">You've flown overnight through Dubai. Buy the jetlag day back later.</span></td><td>—</td><td>Paris</td><td class="num">45</td></tr>
+    <tr><td class="d">Sat 12</td><td>Paris → Strasbourg, half-day in the old town</td><td><span class="chip c-res">TGV res ~€13</span></td><td>Strasbourg</td><td class="num">50</td></tr>
+    <tr><td class="d">Sun 13</td><td>Strasbourg → Stuttgart → Munich</td><td><span class="chip c-free">free</span></td><td>Munich</td><td class="num">35</td></tr>
+    <tr><td class="d">Mon 14</td><td>Munich — full day, pre-festival prices</td><td>—</td><td>Munich</td><td class="num">45</td></tr>
+    <tr><td class="d">Tue 15</td><td>Munich → Salzburg (day) → Vienna</td><td><span class="chip c-free">free</span></td><td>Vienna</td><td class="num">50</td></tr>
+    <tr><td class="d">Wed 16</td><td>Vienna — full day</td><td>—</td><td>Vienna</td><td class="num">45</td></tr>
+    <tr><td class="d">Thu 17</td><td>Vienna → Bratislava (1h stop, +1 country) → Budapest</td><td><span class="chip c-free">free</span></td><td>Budapest</td><td class="num">40</td></tr>
+    <tr><td class="d">Fri 18</td><td>Budapest — full day, thermal baths</td><td>—</td><td>Budapest</td><td class="num">40</td></tr>
+    <tr><td class="d">Sat 19</td><td>Budapest → Prague</td><td><span class="chip c-free">free</span></td><td>Prague</td><td class="num">45</td></tr>
+    <tr><td class="d">Sun 20</td><td>Prague — full day</td><td>—</td><td>Prague</td><td class="num">40</td></tr>
+    <tr><td class="d">Mon 21</td><td>Prague → Wrocław</td><td><span class="chip c-free">free</span></td><td>Wrocław</td><td class="num">35</td></tr>
+    <tr><td class="d">Tue 22</td><td>Wrocław → Kraków · Kazimierz quarter</td><td><span class="chip c-free">free</span></td><td>Kraków</td><td class="num">35</td></tr>
+    <tr><td class="d">Wed 23</td><td>Kraków → Gdańsk (long leg, book a morning train)</td><td><span class="chip c-free">free</span></td><td>Gdańsk</td><td class="num">35</td></tr>
+    <tr><td class="d">Thu 24</td><td>Gdańsk — Old Town, Baltic coast, repack for Iceland</td><td>—</td><td>Gdańsk</td><td class="num">35</td></tr>
+    <tr class="tot"><td colspan="4">14 days · 7 countries · France, Germany, Austria, Slovakia, Hungary, Czechia, Poland</td><td class="num">≈ €575</td></tr>
+  </table></div>
+  <p class="sm" style="margin-top:0">Beds, food and local transport only. Add ~€90 reservations and city cards,
+  ~€80 museums and baths, ~€120 buffer → <strong>plan on €850–900</strong>. Solo, hostel dorms, booked 3+ weeks out.</p>
+</section>
+
+<section id="iceland">
+  <p class="sec-no">§ 03 — Phase 2 · 25 September – 3 October</p>
+  <h2>Iceland is where this budget gets decided</h2>
+  <p class="lede">Nine days in the single most expensive country you'll touch — and the one where being Jain
+  goes from inconvenient to genuinely limiting. Get this phase right and the rest is comfortable.</p>
+
+  <div class="cols">
+    <div><span class="lab">Ring Road</span><div class="v">1,332 km</div><p>Nine days is enough to drive it fully — the only trip length where that's true. Under 7 days, don't try.</p></div>
+    <div><span class="lab">Restaurant main</span><div class="v">€25–35</div><p>Per plate. Jain-compatible: close to nothing outside Reykjavík.</p></div>
+    <div><span class="lab">Car, shared 4 ways</span><div class="v">€25/day</div><p>Versus €80–100 solo. Iceland punishes solo travel harder than anywhere in Europe.</p></div>
+    <div><span class="lab">Eurail value here</span><div class="v">€0</div><p>Iceland has no passenger railway at all. Nine days of your pass burn unused — unavoidable, but plan around it.</p></div>
+  </div>
+
+  <ul>
+    <li><strong>Find three other people before you book anything.</strong> Car, fuel and a guesthouse room all
+    divide by four. Solo Iceland for 9 days is €1,800+; shared four ways it's €900–1,100. The GEM exchange
+    cohort and the Indian student groups are full of people doing the same window — ask in September, not October.</li>
+    <li><strong>Campervan vs car+guesthouse.</strong> A campervan folds bed and transport into one line
+    (~€110–150/day for 4) and lets you cook — which for you is a food solution, not just a saving. Late
+    September is the last workable month for it before the weather turns.</li>
+    <li><strong>Book the car before the flight.</strong> Icelandic rental stock is small and September is
+    still shoulder season demand. Beds you can find late; a 4×4 you cannot.</li>
+    <li><strong>Aurora is live from late September</strong> — you're inside the season, at its very start.
+    Dark hours are still short, so prioritise nights outside Reykjavík's light dome.</li>
+    <li><strong>Exit KEF → CDG</strong> on 3 or 4 Oct (Icelandair and Play both fly it), collect the stored
+    bag in Paris, TGV to Grenoble. That routing is why Paris is the right storage city.</li>
+  </ul>
+  <p class="sm">Realistic 9-day Iceland, shared four ways, cooking most meals: <strong>€950–1,250</strong> all-in
+  excluding the GDN→KEF and KEF→CDG flights (≈€90 and ≈€110 respectively if booked now).</p>
+</section>
+
+<section id="grenoble">
+  <p class="sec-no">§ 04 — Phase 3 · 5 October – 18 December</p>
+  <h2>Eleven windows, and Monday is the one nobody uses</h2>
+  <p class="lede">From the GEM timetable for your six courses: Saturday and Sunday are free 100% of the time,
+  <strong>Monday 80%</strong>, Thursday 40%. Tuesday, Wednesday and Friday are locked at 90%. So the unit isn't
+  a weekend — it's Friday evening to Monday night, eleven times.</p>
+
+  <div class="scroll"><table>
+    <tr><th>#</th><th>Window</th><th>Reachable on the pass</th><th>Rail cost</th><th>Note</th></tr>
+    <tr><td class="d">G01</td><td class="d">9–12 Oct</td><td>Lyon · Annecy · Chambéry</td><td><span class="chip c-free">€0 · TER</span></td><td>Stay close — you've just moved in. Costs you literally nothing.</td></tr>
+    <tr><td class="d">G02</td><td class="d">16–19 Oct</td><td>Geneva · Turin</td><td><span class="chip c-free">€0–10</span></td><td>First border hop. Geneva is reservation-free; both under 3h.</td></tr>
+    <tr><td class="d">G03</td><td class="d">23–26 Oct</td><td>Milan · Marseille</td><td><span class="chip c-res">€10–20</span></td><td></td></tr>
+    <tr><td class="d">G04</td><td class="d">30 Oct – 2 Nov</td><td>Paris · Barcelona</td><td><span class="chip c-res">€20–40</span></td><td><strong>Toussaint.</strong> All of France travels — reserve 4 weeks out or don't bother.</td></tr>
+    <tr><td class="d">G05</td><td class="d">6–9 Nov</td><td>Venice · Florence</td><td><span class="chip c-res">€20–40</span></td><td><strong>Armistice, Wed 11 Nov.</strong> Bridge Tue night → Thu morning for a 5-day run. Best week of the term for a long haul.</td></tr>
+    <tr><td class="d">G06</td><td class="d">13–16 Nov</td><td>Nice · Monaco · Cinque Terre</td><td><span class="chip c-res">€15–30</span></td><td>Italian regional trains along the coast are reservation-free once you're there.</td></tr>
+    <tr><td class="d">G07</td><td class="d">20–23 Nov</td><td>Zurich · Bern · Interlaken</td><td><span class="chip c-free">≈ €0</span></td><td>Swiss trains need no reservation — free to reach, expensive to stand in. Pack food.</td></tr>
+    <tr><td class="d">G08</td><td class="d">27–30 Nov</td><td>Strasbourg · Colmar</td><td><span class="chip c-res">€10–20</span></td><td>Alsace Christmas markets open this weekend. Best in Europe; Colmar onward is free TER.</td></tr>
+    <tr><td class="d">G09</td><td class="d">4–7 Dec</td><td>Lyon</td><td><span class="chip c-free">€0 · TER</span></td><td><strong>★ Fête des Lumières, 5–8 Dec.</strong> Free festival, free train, 1h15 away. Non-negotiable.</td></tr>
+    <tr><td class="d">G10</td><td class="d">11–14 Dec</td><td><span class="chip c-no">pass expired</span></td><td>—</td><td>Ski instead — Alpe d'Huez is 1h15 by bus, and it's the season opener.</td></tr>
+    <tr><td class="d">G11</td><td class="d">18–21 Dec</td><td>→ Paris <span class="chip c-no">off-pass</span></td><td><span class="chip c-no">€60–100</span></td><td>Term ends 18 Dec. <strong>Buy this ticket now.</strong> Travel up on the 21st and sleep near CDG — a 14:25 flight on a December morning isn't worth the gamble.</td></tr>
+  </table></div>
+</section>
+
+<section id="pack">
+  <p class="sec-no">§ 05 — The 35 kg problem</p>
+  <h2>Weight is your scarcest currency, not euros</h2>
+  <p class="lede">35 kg out, 40 kg back, 7 kg cabin. Emirates allows the 35 kg split across two pieces
+  (32 kg max each). Every kilo has an opportunity cost, so the rule is simple: <strong>carry what India makes
+  cheaply and France doesn't sell; buy everything alpine in Grenoble.</strong></p>
+
+  <div class="bar" title="35 kg allocation">
+    <i style="flex:9;background:var(--accent)"></i><i style="flex:2.5;background:var(--warn)"></i>
+    <i style="flex:8;background:var(--glacier)"></i><i style="flex:6;background:var(--ice)"></i>
+    <i style="flex:3;background:var(--moss)"></i><i style="flex:3;background:var(--muted)"></i>
+    <i style="flex:2;background:var(--ink-2)"></i><i style="flex:1.5;background:var(--rule)"></i>
+  </div>
+  <p class="sm" style="margin-bottom:22px">Jain food 9 · spices 2.5 · winter layers 8 · everyday clothes 6 ·
+  shoes 3 · electronics 3 · toiletries &amp; meds 2 · kitchen 1.5 &nbsp;=&nbsp; 35 kg</p>
+
+  <h3 style="font-size:17px;margin-bottom:2px">Carry from India — cheaper, better, or simply unavailable there</h3>
+  <div class="scroll"><table>
+    <tr><th>Item</th><th class="num">kg</th><th class="num">₹ India</th><th class="num">€ France</th><th>Why it earns its weight</th></tr>
+    <tr><td><strong>3 L pressure cooker</strong><span class="sm">Hawkins / Prestige — search "Hawkins 3L contura"</span></td><td class="num">1.8</td><td class="num">1,600</td><td class="num">60+</td><td>The single highest-value object you can pack. Dal, rice, sabzi in one vessel. French kitchens don't stock these.</td></tr>
+    <tr><td><strong>Spice kit</strong><span class="sm">Haldi, jeera, rai, hing, dhaniya, red chilli, garam masala, MDH/Everest blends</span></td><td class="num">2.5</td><td class="num">1,200</td><td class="num">45</td><td>Hing especially — near-impossible outside an Indian grocer, and it's what makes Jain cooking work without onion or garlic.</td></tr>
+    <tr><td><strong>RTE pouches</strong><span class="sm">MTR / Gits / Haldiram — see § 06 for the allocation</span></td><td class="num">9.0</td><td class="num">3,000</td><td class="num">120</td><td>₹100 a pack here, €4 there. But the real reason is Iceland, not the money.</td></tr>
+    <tr><td><strong>Khakhra &amp; thepla</strong><span class="sm">Vacuum-packed, 3–4 week shelf life</span></td><td class="num">1.5</td><td class="num">800</td><td class="num">—</td><td>Doesn't exist in Europe. Train-day food that needs no kitchen, no heat, no explanation.</td></tr>
+    <tr><td><strong>Medicine kit</strong><span class="sm">Crocin, Combiflam, Digene, ORS, Betadine, antihistamine, a doctor-signed antibiotic course</span></td><td class="num">1.0</td><td class="num">1,500</td><td class="num">70</td><td>French pharmacies need a French prescription for most of this. Carry the prescription copy too.</td></tr>
+    <tr><td><strong>Thermal base layers ×3</strong></td><td class="num">1.2</td><td class="num">2,000</td><td class="num">60</td><td>Base layers only. <strong>Not</strong> the outer jacket.</td></tr>
+    <tr><td><strong>Light rain shell + fleece</strong><span class="sm">Decathlon India — Quechua MH100 / Forclaz</span></td><td class="num">1.4</td><td class="num">3,000</td><td class="num">—</td><td><strong>Iceland needs this on 25 Sep</strong>, ten days before you ever see Grenoble. This is the one piece of outerwear you must carry.</td></tr>
+    <tr><td><strong>Type-D→E adapters ×3 + extension board</strong></td><td class="num">0.5</td><td class="num">900</td><td class="num">35</td><td>One French socket, six Indian plugs. The board solves it.</td></tr>
+    <tr><td><strong>Formal set + 1 kurta</strong></td><td class="num">2.0</td><td class="num">—</td><td class="num">—</td><td>Presentations, and Diwali falls ~8 Nov while you're there.</td></tr>
+    <tr><td><strong>Steel containers, ladle, small tawa</strong></td><td class="num">1.5</td><td class="num">1,200</td><td class="num">45</td><td>A tawa is not a French object. Roti needs one.</td></tr>
+  </table></div>
+
+  <h3 style="font-size:17px;margin:30px 0 2px">Buy in Grenoble — do not waste outbound kilos</h3>
+  <p class="lede" style="margin-bottom:12px">Grenoble is an alpine sports city. <strong>Decathlon is French, and
+  Grenoble is close to the best place on earth to buy mountain kit.</strong> Carrying a winter jacket from India
+  is three kilos spent on a worse product.</p>
+  <ul>
+    <li><strong>Winter jacket, down layer, gloves, beanie, snow boots</strong> — Decathlon Grenoble, October, ~€150–220 for the set. Better rated for actual Alpine cold than anything you'd buy in Bangalore.</li>
+    <li><strong>Bedding, towels, pillow, kitchen basics</strong> — IKEA Grenoble or Action, ~€100. Never fly these.</li>
+    <li><strong>Toiletries past the first month</strong> — carry 4 weeks, buy the rest. Liquids are the worst weight-to-value ratio in your bag.</li>
+    <li><strong>Rice, atta, dal, lentils</strong> — Indian grocers exist in Grenoble and certainly in Lyon. Carrying staples is the classic first-timer mistake; carry <em>spices</em>, buy <em>bulk</em>.</li>
+  </ul>
+  <p class="sm">Return leg: you get <strong>40 kg</strong>, five more than you flew out with. That headroom is
+  for what you accumulate — so you don't need to hoard capacity on the way there.</p>
+</section>
+
+<section id="rte">
+  <p class="sec-no">§ 06 — Jain food, costed properly</p>
+  <h2>Nine kilos of food, allocated by opportunity cost</h2>
+  <p class="lede">You asked for this to be decided on opportunity cost rather than instinct. The instinct is to
+  carry food for the semester. The maths says the opposite — <strong>carry food for the 23 days before the
+  semester</strong>, and almost none for the 74 days after it.</p>
+
+  <div class="scroll"><table>
+    <tr><th>Phase</th><th class="num">Days</th><th>Jain difficulty</th><th class="num">Meal if bought</th><th class="num">€ saved per kg carried</th></tr>
+    <tr><td><strong>Iceland</strong> · 25 Sep – 3 Oct</td><td class="num">9</td><td><span class="chip c-no">severe</span><span class="sm">No Indian restaurants outside Reykjavík. No onion/garlic-free options anywhere on the Ring Road.</span></td><td class="num">€28</td><td class="num" style="color:var(--accent);font-weight:700">≈ €83</td></tr>
+    <tr><td><strong>Central belt</strong> · 11–24 Sep</td><td class="num">14</td><td><span class="chip c-res">moderate</span><span class="sm">Indian restaurants in every capital; hostel kitchens; supermarkets. Manageable but repetitive.</span></td><td class="num">€13</td><td class="num" style="font-weight:600">≈ €36</td></tr>
+    <tr><td><strong>Grenoble term</strong> · 5 Oct – 18 Dec</td><td class="num">74</td><td><span class="chip c-free">low</span><span class="sm">Your own kitchen, Indian grocers in Grenoble and Lyon, a pressure cooker and time to cook.</span></td><td class="num">€4</td><td class="num">≈ €10</td></tr>
+  </table></div>
+
+  <div class="verdict">
+    <p class="lab">The allocation</p>
+    <p><strong>Iceland gets the food first, and it isn't close.</strong> A kilo of RTE carried into Iceland
+    returns about <strong>€83</strong>; the same kilo carried for the Grenoble term returns about
+    <strong>€10</strong>, because in Grenoble you can simply buy the identical pouch for €4 or cook from scratch.
+    Carrying 74 days of food would cost 22 kg — two-thirds of your entire allowance — to save less than €200.</p>
+    <p>So: <strong>18 packs for Iceland</strong> (two a day, ~5.4 kg), <strong>10 for the belt</strong> (one a
+    day as the fallback when a city defeats you, ~3 kg), and <strong>a token 2 kg</strong> for the first week in
+    Grenoble before you've found the grocers and bought a cooker's worth of staples. Nine kilos, spent where
+    scarcity actually is.</p>
+    <p>The khakhra and thepla do separate work: they need no kitchen, no heating and no negotiation, which makes
+    them the right food for <strong>travel days</strong> — the 6-hour Kraków→Gdańsk leg, the Ring Road drive
+    between towns. Budget them by travel days, not by meals.</p>
+  </div>
+
+  <ul>
+    <li><strong>Learn the three sentences in French now</strong> — <em>« Sans oignon, sans ail, sans pommes de
+    terre »</em>. Not knowing them costs you a meal a week for three months.</li>
+    <li><strong>Customs:</strong> the EU bans meat and dairy from outside the union. Sealed vegetarian RTE and
+    spices are fine — but <strong>anything with milk solids or ghee is technically dairy.</strong> Check the
+    labels on your pouches and leave the ghee-based ones at home. Keep everything factory-sealed and declared if asked.</li>
+    <li><strong>Grenoble grocers</strong> — find the Indian and Sri Lankan shops in your first week, not your
+    fourth. Lyon's are larger and 1h15 away; make one bulk run in October and you're set until December.</li>
+  </ul>
+</section>
+
+<section id="money">
+  <p class="sec-no">§ 07 — Cards, cash and connectivity</p>
+  <h2>Scapia is a good primary and a bad only</h2>
+
+  <div class="cols">
+    <div><span class="lab">Cash to carry</span><div class="v">€350–400</div><p>Not more. Europe is card-first and cash beyond this is dead weight with real theft risk.</p></div>
+    <div><span class="lab">Cards to carry</span><div class="v">3</div><p>Scapia primary, one forex debit backup, one card left at home for emergencies.</p></div>
+    <div><span class="lab">SIM cost, 3.5 months</span><div class="v">≈ €90</div><p>An eSIM for the travel phase, then a French line once you have an address.</p></div>
+  </div>
+
+  <h3 style="font-size:17px;margin:26px 0 2px">Money</h3>
+  <ul>
+    <li><strong>Scapia is the right primary</strong> — zero forex markup on a Visa network is genuinely the best
+    card you can be carrying. But it is a <em>credit</em> card, and that creates three failure modes worth
+    pre-empting: some European fuel pumps and rail kiosks pre-authorise amounts that trip limits; a handful of
+    small merchants in Poland and Czechia are debit-or-cash; and ATM withdrawal on a credit card is expensive
+    everywhere.</li>
+    <li><strong>Carry a second, unrelated card</strong> — a forex debit card (Niyo, Fi, IndusInd) on a
+    <em>different</em> network where possible. The scenario you're insuring against isn't cost, it's a single
+    card being blocked on a Sunday in Gdańsk.</li>
+    <li><strong>Always choose to be charged in the local currency</strong>, never in rupees. Dynamic currency
+    conversion at the terminal quietly adds 3–5% and it silently cancels the entire benefit of holding Scapia.</li>
+    <li><strong>Don't buy złoty, koruna, forint or króna in India.</strong> You'll take a terrible rate twice.
+    Withdraw locally from a bank ATM — and decline the machine's own conversion offer.</li>
+    <li><strong>Iceland is effectively cashless</strong> — card works at petrol pumps, campsites, everywhere.
+    Carry almost no krónur.</li>
+    <li><strong>Tell your banks the travel dates</strong> before you fly, and check whether your remittances fall
+    under the education TCS rate rather than the general one — the difference is material on semester-sized sums.
+    Worth one conversation with your bank, not a guess.</li>
+  </ul>
+
+  <h3 style="font-size:17px;margin:26px 0 2px">Connectivity</h3>
+  <ul>
+    <li><strong>Phase 1 + Iceland (11 Sep – 4 Oct): a regional eSIM.</strong> Airalo or Nomad, Europe-wide,
+    ~€20–30 for 20 GB. It activates before you land and works across all seven countries plus Iceland with no
+    shop visits while you're moving daily. Do not use Indian roaming — it will cost more than the flight's meal service.</li>
+    <li><strong>From October: a French line.</strong> Free Mobile at €19.99/month is unlimited in France with
+    generous EU roaming — which matters, because it covers your weekend trips too. Bouygues and SFR are
+    comparable.</li>
+    <li><strong>The catch:</strong> French postpaid usually wants a French address and a RIB (bank details), and
+    a French bank account wants an address — a loop that catches every exchange student. The way through is a
+    <strong>prepaid SIM (Lycamobile, Lebara) on day one with just your passport</strong>, then switch to Free
+    once the address and account exist.</li>
+    <li><strong>Keep your Indian number alive.</strong> ₹200–300/month of minimum recharge. Every Indian bank
+    OTP, your Scapia login, DigiLocker and UPI are welded to it. Losing that number mid-semester is the single
+    most disruptive small failure available to you.</li>
+  </ul>
+</section>
+
+<section id="rail">
+  <p class="sec-no">§ 08 — What the pass actually buys</p>
+  <h2>Grenoble is a spur, not a hub — and the pass has an expiry</h2>
+  <p class="lede">Two structural facts shape every weekend of Phase 3. Neither is a problem if you know them in
+  October; both are expensive surprises in December.</p>
+
+  <p class="lede" style="margin-top:-10px"><strong>Confirmed: 3-month continuous.</strong> That's the better
+  pass to hold — unlimited boardings, no day-rationing, no reason ever to think twice about a train. But
+  "continuous" buys unlimited <em>travel</em>, not unlimited <em>free</em> travel, and the gap between those two
+  is where pass-holders get caught.</p>
+
+  <div class="alert warn">
+    <span class="when">The one real cost</span>
+    <h3>Reservations are not covered, and on French high-speed they're compulsory</h3>
+    <p>Every TGV, Frecciarossa, AVE, Eurostar and Nightjet requires a paid seat reservation
+    <em>on top of</em> the pass, with a small pass-holder quota that sells out weeks ahead. You cannot walk onto
+    a TGV with a Eurail pass and a hopeful expression.</p>
+    <p>Budget <strong>€250–350 across the semester</strong> for reservations. It's the true cost of your
+    "free" travel — and the reason to book each Friday train the day you decide the weekend, not the Wednesday
+    before it.</p>
+  </div>
+
+  <div class="verdict">
+    <p class="lab">What continuous actually unlocks</p>
+    <p><strong>Your local radius becomes genuinely free and spontaneous.</strong> French regional trains — TER —
+    need no reservation at all. Grenoble to <strong>Lyon, Chambéry, Annecy, Valence and Grenoble's whole valley</strong>
+    is board-and-sit, zero cost, zero planning, as many times as you like. Treat Lyon as a second living room:
+    the Indian grocers, the airport, concerts, a Tuesday evening if you feel like it.</p>
+    <p>Switzerland is the quiet bonus — <strong>Swiss trains almost never require reservations</strong>, so
+    Zurich, Bern and Interlaken cost you nothing to reach even though they're 4–5h out. The expensive part of
+    Switzerland is standing in it, not getting there.</p>
+    <p>So the strategy inverts from "how many trips can I afford" to <strong>"how many Fridays are there".</strong>
+    Eleven. Use all of them.</p>
+  </div>
+
+  <div class="alert">
+    <span class="when">Hard cliff · around 10 December</span>
+    <h3>Activate 11 Sep and the pass dies before your last two windows</h3>
+    <p>Three continuous months from 11 September expires ~<strong>10 December</strong>. That covers Phase 1,
+    Iceland (useless there — no railway) and windows G01–G09. It does <strong>not</strong> cover G10, G11, or your
+    run up to Paris on 21 December, which is precisely when French fares peak for Christmas.</p>
+    <p><strong>Therefore: front-load.</strong> Every destination that needs a long, reservation-heavy haul —
+    Venice, Barcelona, Nice, Florence, Paris — gets done in October and November while the pass is alive.
+    December is for skiing (bus, not rail) and Lyon. And <strong>buy the 21 Dec Grenoble→Paris TGV separately,
+    now</strong>, at ~€60–100 — it will only get worse.</p>
+  </div>
+</section>
+
+<footer>
+  Built from the Emirates ticket, the accommodation confirmation, the GEM course timetable and fact sheet, and the
+  Campus France attestation. Rail, bed and food figures are planning estimates for a solo traveller in hostel
+  dorms booking three or more weeks ahead — treat them as a budget frame, not quotes. Verified externally:
+  Grenoble↔Lyon fares, Oktoberfest 2026 (19 Sep – 4 Oct), Fête des Lumières 2026 (5–8 Dec), Gdańsk→Keflavík
+  service. Last revised 12 August 2026.
+</footer>
+</main>
