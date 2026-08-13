@@ -1,0 +1,209 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Iberia — Grenoble Exchange OS</title>
+<style>
+:root{
+  --ground:#E8ECEE;--surface:#FBFCFC;--surface-2:#F1F4F5;
+  --ink:#141E27;--ink-2:#41525F;--muted:#75868F;
+  --rule:#CDD6DA;--rule-2:#DFE6E9;
+  --accent:#C13F24;--glacier:#26707E;--ice:#3A6E9E;--moss:#4A6B3A;--warn:#8A5A0C;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --ground:#0E161C;--surface:#151F27;--surface-2:#1B2831;
+  --ink:#E3EAEE;--ink-2:#A8B8C1;--muted:#7B8C96;
+  --rule:#2A3A45;--rule-2:#223039;
+  --accent:#F06742;--glacier:#54AEBE;--ice:#6FA8D6;--moss:#8FB07A;--warn:#D8A93C;
+}}
+:root[data-theme="dark"]{
+  --ground:#0E161C;--surface:#151F27;--surface-2:#1B2831;
+  --ink:#E3EAEE;--ink-2:#A8B8C1;--muted:#7B8C96;
+  --rule:#2A3A45;--rule-2:#223039;
+  --accent:#F06742;--glacier:#54AEBE;--ice:#6FA8D6;--moss:#8FB07A;--warn:#D8A93C;
+}
+*{box-sizing:border-box}
+body{background:var(--ground);color:var(--ink);margin:0;font-size:15px;line-height:1.6;
+  font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;-webkit-font-smoothing:antialiased}
+img{max-width:100%;display:block}
+.mono{font-family:ui-monospace,"SF Mono",SFMono-Regular,Menlo,Consolas,monospace;font-variant-numeric:tabular-nums}
+.wrap{max-width:1060px;margin:0 auto;padding:0 20px}
+a{color:var(--accent)}
+nav{position:sticky;top:0;z-index:30;background:var(--surface);border-bottom:1px solid var(--rule);overflow-x:auto}
+nav div{max-width:1060px;margin:0 auto;padding:11px 20px;display:flex;gap:20px;white-space:nowrap}
+nav a{font-family:ui-monospace,Menlo,monospace;font-size:11px;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--ink-2);text-decoration:none;padding-bottom:2px;border-bottom:2px solid transparent}
+nav a:hover,nav a:focus-visible{color:var(--accent);border-bottom-color:var(--accent);outline:none}
+nav a.on{color:var(--accent);border-bottom-color:var(--accent)}
+
+.hero{position:relative;margin-top:0;border-bottom:2px solid var(--ink)}
+.hero-img{width:100%;height:clamp(210px,34vw,380px);object-fit:cover;filter:saturate(.92)}
+.hero-cap{position:absolute;inset:auto 0 0 0;padding:26px 0 20px;
+  background:linear-gradient(to top,rgba(6,12,17,.92),rgba(6,12,17,.55) 55%,transparent)}
+.hero-cap .wrap{color:#fff}
+.eyebrow{font-family:ui-monospace,Menlo,monospace;font-size:11px;letter-spacing:.18em;
+  text-transform:uppercase;color:#F2A38C;margin:0 0 9px}
+h1{font-size:clamp(28px,4.6vw,46px);line-height:1.03;letter-spacing:-.028em;font-weight:700;margin:0;
+  text-wrap:balance;color:#fff}
+.hero-sub{color:#D6E0E6;margin:10px 0 0;max-width:60ch;font-size:15px}
+
+h2{font-size:clamp(20px,2.7vw,27px);letter-spacing:-.02em;margin:0 0 4px;font-weight:700;text-wrap:balance}
+section{padding:46px 0;border-bottom:1px solid var(--rule)}
+.sec-no{font-family:ui-monospace,Menlo,monospace;font-size:11px;letter-spacing:.16em;
+  text-transform:uppercase;color:var(--muted);margin:0 0 10px}
+.lede{color:var(--ink-2);max-width:66ch;margin:10px 0 24px}
+
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));border:1px solid var(--rule);margin:18px 0 6px}
+.stats>div{padding:15px 17px;border-right:1px solid var(--rule-2)}
+.stats>div:last-child{border-right:none}
+.stats .lab{font-family:ui-monospace,Menlo,monospace;font-size:10px;letter-spacing:.13em;
+  text-transform:uppercase;color:var(--muted)}
+.stats .v{font-family:ui-monospace,Menlo,monospace;font-size:22px;font-weight:600;letter-spacing:-.02em;margin-top:3px}
+.stats p{margin:4px 0 0;font-size:12.5px;color:var(--ink-2)}
+
+/* day cards */
+.day{display:grid;grid-template-columns:190px 1fr;gap:0;border:1px solid var(--rule);margin-bottom:14px;
+  background:var(--surface);overflow:hidden}
+.day img{width:100%;height:100%;min-height:150px;object-fit:cover}
+.day-body{padding:15px 18px}
+.day-head{display:flex;flex-wrap:wrap;gap:10px;align-items:baseline;margin-bottom:5px}
+.day-date{font-family:ui-monospace,Menlo,monospace;font-size:12px;color:var(--accent);font-weight:600}
+.day-city{font-size:17px;font-weight:700;letter-spacing:-.015em}
+.day-country{font-family:ui-monospace,Menlo,monospace;font-size:10px;letter-spacing:.1em;
+  text-transform:uppercase;color:var(--muted)}
+.day-body p{margin:0 0 9px;font-size:14px;color:var(--ink-2)}
+.meta{display:flex;flex-wrap:wrap;gap:7px}
+.chip{display:inline-block;font-family:ui-monospace,Menlo,monospace;font-size:10px;letter-spacing:.07em;
+  text-transform:uppercase;padding:2px 7px;border:1px solid currentColor;white-space:nowrap}
+.c-free{color:var(--moss)}.c-res{color:var(--warn)}.c-no{color:var(--accent)}
+.c-bed{color:var(--glacier)}.c-cost{color:var(--ink-2)}
+
+/* trip cards on the hub */
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px;margin-top:22px}
+.card{border:1px solid var(--rule);background:var(--surface);text-decoration:none;color:inherit;
+  display:flex;flex-direction:column;transition:border-color .16s}
+.card:hover,.card:focus-visible{border-color:var(--accent);outline:none}
+.card img{width:100%;height:172px;object-fit:cover}
+.card-b{padding:16px 18px;display:flex;flex-direction:column;gap:7px;flex:1}
+.card h3{margin:0;font-size:19px;letter-spacing:-.02em}
+.card .when{font-family:ui-monospace,Menlo,monospace;font-size:11px;color:var(--accent);letter-spacing:.04em}
+.card p{margin:0;font-size:13.5px;color:var(--ink-2);flex:1}
+.card .foot{display:flex;justify-content:space-between;font-family:ui-monospace,Menlo,monospace;
+  font-size:11px;color:var(--muted);border-top:1px solid var(--rule-2);padding-top:9px;margin-top:3px}
+
+/* photo strip */
+.strip{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px;margin:18px 0}
+.strip figure{margin:0;position:relative;overflow:hidden}
+.strip img{width:100%;height:132px;object-fit:cover}
+.strip figcaption{position:absolute;inset:auto 0 0 0;padding:16px 9px 6px;color:#fff;font-size:11px;
+  font-family:ui-monospace,Menlo,monospace;letter-spacing:.05em;
+  background:linear-gradient(to top,rgba(6,12,17,.9),transparent)}
+
+table{width:100%;border-collapse:collapse;font-size:14px;margin:14px 0}
+.scroll{overflow-x:auto}
+th{text-align:left;font-family:ui-monospace,Menlo,monospace;font-size:10px;letter-spacing:.13em;
+  text-transform:uppercase;color:var(--muted);font-weight:400;padding:0 12px 8px 0;
+  border-bottom:1px solid var(--rule);vertical-align:bottom}
+td{padding:10px 12px 10px 0;border-bottom:1px solid var(--rule-2);vertical-align:top}
+td.num,th.num{text-align:right;font-family:ui-monospace,Menlo,monospace;font-variant-numeric:tabular-nums;padding-right:0}
+tr.tot td{border-top:2px solid var(--ink);border-bottom:none;font-weight:700;padding-top:11px}
+.sm{font-size:12.5px;color:var(--muted);display:block;margin-top:2px}
+
+.verdict{border:1px solid var(--glacier);padding:17px 20px;margin:20px 0;background:var(--surface-2)}
+.verdict .lab{font-family:ui-monospace,Menlo,monospace;font-size:10px;letter-spacing:.15em;
+  text-transform:uppercase;color:var(--glacier);margin-bottom:6px}
+.verdict p{margin:0;font-size:14.5px}.verdict p+p{margin-top:9px}
+.warnbox{border-left:3px solid var(--warn);background:var(--surface-2);padding:15px 19px;margin:18px 0;font-size:14px;color:var(--ink-2)}
+.warnbox strong{color:var(--ink)}
+ul{padding-left:19px}li{margin-bottom:6px;color:var(--ink-2)}li strong{color:var(--ink)}
+footer{padding:30px 0 66px;font-size:12px;color:var(--muted)}
+@media (max-width:620px){ .day{grid-template-columns:1fr} .day img{height:170px;min-height:0} }
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style></head><body>
+<nav><div><a href="index.html">The OS</a><a href="trips.html">Trips</a><a href="trip-belt.html">Central Belt</a><a href="trip-iceland.html">Iceland</a><a href="trip-iberia.html" class="on">Iberia</a><a href="trip-weekends.html">Weekends</a><a href="budget.html">Costs</a></div></nav>
+<div class="hero">
+  <img class="hero-img" src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/f2/Lisboa_-_Portugal_%2852597836992%29.jpg/1280px-Lisboa_-_Portugal_%2852597836992%29.jpg" alt="" loading="eager">
+  <div class="hero-cap"><div class="wrap">
+    <p class="eyebrow">7 – 15 November 2026 · the week to miss class</p><h1>Spain and Portugal,<br>and the week that pays for them</h1><p class="hero-sub">Four cities in nine days, built around Armistice Day falling midweek — the one week in the whole term where missing class is cheap.</p>
+  </div></div>
+</div>
+<main class="wrap">
+
+<section>
+  <p class="sec-no">§ — 7 – 15 November</p>
+  <h2>Nine days away for three missed classes</h2>
+  <p class="lede">Spain and Portugal cannot be done in a weekend, and the reason is structural:
+  <strong>Madrid to Lisbon has no usable rail link.</strong> The direct night train was discontinued and what
+  survives is ten hours with changes. Add seven hours to reach Barcelona and Iberia needs six days minimum.
+  So it has to come out of teaching time — and one week costs dramatically less than the rest.</p>
+  <div class="stats"><div><span class="lab">Days</span><div class="v">9</div><p>Bracketed by two free weekends.</p></div><div><span class="lab">Classes missed</span><div class="v">3</div><p>Tuesday 10, Thursday 12, Friday 13.</p></div><div><span class="lab">Countries</span><div class="v">2</div><p>Spain and Portugal, four cities.</p></div><div><span class="lab">All-in</span><div class="v">≈ €750</div><p>Two flights, two reservations, eight nights.</p></div></div>
+  <div class="verdict"><p class="lab">Why this week, and no other</p>
+  <p><strong>Three separate accidents line up.</strong> Armistice Day falls on <strong>Wednesday 11
+  November</strong> — a public holiday in the exact middle of the week, welding two weekends into one block.
+  The <strong>Eco-Design intensive is already finished</strong> (it runs 14–28 October, five sessions total, and
+  missing two of those would cost 40% of a course). And <strong>Marketing of Innovation has only just
+  started</strong> on 5 November, so you miss its second week — the least damaging point in any course.</p>
+  <p>Toussaint week is the obvious alternative and it is worse: the same nine days, but 1 November falls on a
+  Sunday in 2026 so the holiday is wasted, Eco-Design is still running, and you'd miss <strong>five</strong>
+  teaching days instead of three.</p></div>
+  <div class="warnbox"><strong>Check three things before booking.</strong> The course dates above are last
+  year's — reliable for <em>structure</em>, not for your 2026 calendar, so confirm no intensive runs 7–15
+  November. Check the attendance cap per course: French business schools commonly allow one or two absences and
+  exceeding it can fail you, a grade that transfers back to IIMB. And tell professors in September, not
+  November — advance notice gets you materials and moved deadlines; retroactive excuses get you nothing.</div>
+</section>
+<section>
+  <p class="sec-no">§ — Day by day</p>
+  <h2>Barcelona → Madrid → Lisbon → Porto</h2>
+  <div class="day"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a6/Evening_light_over_Barcelona.jpg/1280px-Evening_light_over_Barcelona.jpg" alt="Barcelona" loading="lazy">
+<div class="day-body"><div class="day-head"><span class="day-date">Sat 7 Nov</span>
+<span class="day-city">Barcelona</span><span class="day-country">Spain</span></div>
+<p>Down through Lyon and Montpellier — long, scenic and on the pass — or fly from Lyon in 1h45 for about €55 and buy the day back. Arrive in time for an evening in the Gothic Quarter.</p><div class="meta"><span class="chip c-res">pass + €30</span><span class="chip c-bed">hostel · 2 nights</span><span class="chip c-cost">€30</span></div></div></div>
+<div class="day"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a6/Evening_light_over_Barcelona.jpg/1280px-Evening_light_over_Barcelona.jpg" alt="Barcelona" loading="lazy">
+<div class="day-body"><div class="day-head"><span class="day-date">Sun 8 Nov</span>
+<span class="day-city">Barcelona</span><span class="day-country">Spain</span></div>
+<p>Sagrada Família — book a timed slot weeks ahead or you simply will not get in — then Park Güell and the Raval. Casa Batlló if Gaudí has you by then.</p><div class="meta"><span class="chip c-cost">book ahead</span><span class="chip c-bed">same hostel</span><span class="chip c-cost">€70</span></div></div></div>
+<div class="day"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/14/Madrid_-_Sky_Bar_360%C2%BA_%28Hotel_Riu_Plaza_Espa%C3%B1a%29%2C_vistas_19.jpg/1280px-Madrid_-_Sky_Bar_360%C2%BA_%28Hotel_Riu_Plaza_Espa%C3%B1a%29%2C_vistas_19.jpg" alt="Barcelona → Madrid" loading="lazy">
+<div class="day-body"><div class="day-head"><span class="day-date">Mon 9 Nov</span>
+<span class="day-city">Barcelona → Madrid</span><span class="day-country">Spain</span></div>
+<p>AVE high-speed, 2h30 — covered by the pass for a €13 reservation. Afternoon in Madrid: Puerta del Sol, Plaza Mayor, and tapas in La Latina.</p><div class="meta"><span class="chip c-res">pass + €13</span><span class="chip c-bed">hostel · 2 nights</span><span class="chip c-cost">€75</span></div></div></div>
+<div class="day"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/14/Madrid_-_Sky_Bar_360%C2%BA_%28Hotel_Riu_Plaza_Espa%C3%B1a%29%2C_vistas_19.jpg/1280px-Madrid_-_Sky_Bar_360%C2%BA_%28Hotel_Riu_Plaza_Espa%C3%B1a%29%2C_vistas_19.jpg" alt="Madrid" loading="lazy">
+<div class="day-body"><div class="day-head"><span class="day-date">Tue 10 Nov</span>
+<span class="day-city">Madrid</span><span class="day-country">Spain</span></div>
+<p>The Prado in the morning (free in the last two hours of the day if you'd rather queue than pay), Reina Sofía for Guernica, and the Retiro when your feet give out.</p><div class="meta"><span class="chip c-cost">museums ≈€25</span><span class="chip c-bed">same hostel</span><span class="chip c-cost">€70</span></div></div></div>
+<div class="day"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/f2/Lisboa_-_Portugal_%2852597836992%29.jpg/1280px-Lisboa_-_Portugal_%2852597836992%29.jpg" alt="Madrid → Lisbon" loading="lazy">
+<div class="day-body"><div class="day-head"><span class="day-date">Wed 11 Nov</span>
+<span class="day-city">Madrid → Lisbon</span><span class="day-country">Spain · Portugal</span></div>
+<p>The leg with no rail answer — the direct night train was discontinued and what remains is ten hours with changes. Fly, take the 90 minutes, and don't be sentimental about it. Armistice Day, so no class missed today.</p><div class="meta"><span class="chip c-no">flight ≈€45</span><span class="chip c-bed">hostel · 2 nights</span><span class="chip c-cost">€80</span></div></div></div>
+<div class="day"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/f2/Lisboa_-_Portugal_%2852597836992%29.jpg/1280px-Lisboa_-_Portugal_%2852597836992%29.jpg" alt="Lisbon" loading="lazy">
+<div class="day-body"><div class="day-head"><span class="day-date">Thu 12 Nov</span>
+<span class="day-city">Lisbon</span><span class="day-country">Portugal</span></div>
+<p>Alfama and the Miradouro viewpoints, tram 28 if you can stand the crowd, Belém for the tower and the original pastéis. Lisbon is the cheapest capital on this trip — eat properly here.</p><div class="meta"><span class="chip c-cost">cheap ground</span><span class="chip c-bed">same hostel</span><span class="chip c-cost">€60</span></div></div></div>
+<div class="day"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/10/Sintra_-_Palacio_da_Pena_%2820332995770%29_%28cropped2%29.jpg/1280px-Sintra_-_Palacio_da_Pena_%2820332995770%29_%28cropped2%29.jpg" alt="Sintra → Porto" loading="lazy">
+<div class="day-body"><div class="day-head"><span class="day-date">Fri 13 Nov</span>
+<span class="day-city">Sintra → Porto</span><span class="day-country">Portugal</span></div>
+<p>Sintra in the morning — Pena Palace on its ridge, forty minutes by train from Rossio — then Alfa Pendular north to Porto in three hours on the pass.</p><div class="meta"><span class="chip c-res">pass + €10</span><span class="chip c-bed">hostel · 2 nights</span><span class="chip c-cost">€65</span></div></div></div>
+<div class="day"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e5/Puente_Don_Luis_I%2C_Oporto%2C_Portugal%2C_2012-05-09%2C_DD_13.JPG/1280px-Puente_Don_Luis_I%2C_Oporto%2C_Portugal%2C_2012-05-09%2C_DD_13.JPG" alt="Porto" loading="lazy">
+<div class="day-body"><div class="day-head"><span class="day-date">Sat 14 Nov</span>
+<span class="day-city">Porto</span><span class="day-country">Portugal</span></div>
+<p>Ribeira on the riverfront, Livraria Lello, and the port lodges across the Douro in Gaia. The best-value city on the entire itinerary and a good place to end.</p><div class="meta"><span class="chip c-cost">port tasting ≈€15</span><span class="chip c-bed">same hostel</span><span class="chip c-cost">€65</span></div></div></div>
+<div class="day"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e5/Puente_Don_Luis_I%2C_Oporto%2C_Portugal%2C_2012-05-09%2C_DD_13.JPG/1280px-Puente_Don_Luis_I%2C_Oporto%2C_Portugal%2C_2012-05-09%2C_DD_13.JPG" alt="Porto → Grenoble" loading="lazy">
+<div class="day-body"><div class="day-head"><span class="day-date">Sun 15 Nov</span>
+<span class="day-city">Porto → Grenoble</span><span class="day-country">Portugal · France</span></div>
+<p>Fly Porto to Lyon, TER home. Back in Grenoble on Sunday evening, in class Monday morning — having missed three sessions for two countries.</p><div class="meta"><span class="chip c-no">flight ≈€55</span><span class="chip c-bed">→ home</span><span class="chip c-cost">€55</span></div></div></div>
+</section>
+<section>
+  <p class="sec-no">§ — Money</p>
+  <h2>Why two countries only cost €750</h2>
+  <div class="scroll"><table>
+  <tr><th>Line</th><th>Detail</th><th class="num">€</th></tr>
+  <tr><td>Rail on the pass</td><td>Barcelona→Madrid (€13) and Lisbon→Porto (€10) — reservations only<span class="sm">The two expensive legs, carried by the pass for €23</span></td><td class="num">23</td></tr>
+  <tr><td>Rail to Barcelona</td><td>Grenoble→Barcelona reservation, or ≈€55 to fly and gain a day</td><td class="num">30</td></tr>
+  <tr><td>Flights</td><td>Madrid→Lisbon ≈€45, Porto→Lyon ≈€55 — the legs rail genuinely cannot do</td><td class="num">100</td></tr>
+  <tr><td>Beds</td><td>8 nights hostel, €26–30. Cheapest in Lisbon and Porto</td><td class="num">225</td></tr>
+  <tr><td>Food &amp; ground</td><td>9 days at €32. Portugal drags the average down hard</td><td class="num">290</td></tr>
+  <tr><td>Entries</td><td>Sagrada Família, Prado, Reina Sofía, Pena Palace, a port lodge</td><td class="num">85</td></tr>
+  <tr class="tot"><td colspan="2">Nine days, two countries, four cities</td><td class="num">≈ 750</td></tr>
+  </table></div>
+</section>
+<footer>Photographs from Wikimedia Commons under their respective licences. Costs are per person, hostel dorms or shared rooms, booked three or more weeks ahead — planning estimates, not quotes. Rail costs are reservation fees only; the Eurail Global Pass (3-month continuous) covers the seat itself.</footer>
+</main></body></html>

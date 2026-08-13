@@ -1,0 +1,185 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>The Eleven Windows — Grenoble Exchange OS</title>
+<style>
+:root{
+  --ground:#E8ECEE;--surface:#FBFCFC;--surface-2:#F1F4F5;
+  --ink:#141E27;--ink-2:#41525F;--muted:#75868F;
+  --rule:#CDD6DA;--rule-2:#DFE6E9;
+  --accent:#C13F24;--glacier:#26707E;--ice:#3A6E9E;--moss:#4A6B3A;--warn:#8A5A0C;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --ground:#0E161C;--surface:#151F27;--surface-2:#1B2831;
+  --ink:#E3EAEE;--ink-2:#A8B8C1;--muted:#7B8C96;
+  --rule:#2A3A45;--rule-2:#223039;
+  --accent:#F06742;--glacier:#54AEBE;--ice:#6FA8D6;--moss:#8FB07A;--warn:#D8A93C;
+}}
+:root[data-theme="dark"]{
+  --ground:#0E161C;--surface:#151F27;--surface-2:#1B2831;
+  --ink:#E3EAEE;--ink-2:#A8B8C1;--muted:#7B8C96;
+  --rule:#2A3A45;--rule-2:#223039;
+  --accent:#F06742;--glacier:#54AEBE;--ice:#6FA8D6;--moss:#8FB07A;--warn:#D8A93C;
+}
+*{box-sizing:border-box}
+body{background:var(--ground);color:var(--ink);margin:0;font-size:15px;line-height:1.6;
+  font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;-webkit-font-smoothing:antialiased}
+img{max-width:100%;display:block}
+.mono{font-family:ui-monospace,"SF Mono",SFMono-Regular,Menlo,Consolas,monospace;font-variant-numeric:tabular-nums}
+.wrap{max-width:1060px;margin:0 auto;padding:0 20px}
+a{color:var(--accent)}
+nav{position:sticky;top:0;z-index:30;background:var(--surface);border-bottom:1px solid var(--rule);overflow-x:auto}
+nav div{max-width:1060px;margin:0 auto;padding:11px 20px;display:flex;gap:20px;white-space:nowrap}
+nav a{font-family:ui-monospace,Menlo,monospace;font-size:11px;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--ink-2);text-decoration:none;padding-bottom:2px;border-bottom:2px solid transparent}
+nav a:hover,nav a:focus-visible{color:var(--accent);border-bottom-color:var(--accent);outline:none}
+nav a.on{color:var(--accent);border-bottom-color:var(--accent)}
+
+.hero{position:relative;margin-top:0;border-bottom:2px solid var(--ink)}
+.hero-img{width:100%;height:clamp(210px,34vw,380px);object-fit:cover;filter:saturate(.92)}
+.hero-cap{position:absolute;inset:auto 0 0 0;padding:26px 0 20px;
+  background:linear-gradient(to top,rgba(6,12,17,.92),rgba(6,12,17,.55) 55%,transparent)}
+.hero-cap .wrap{color:#fff}
+.eyebrow{font-family:ui-monospace,Menlo,monospace;font-size:11px;letter-spacing:.18em;
+  text-transform:uppercase;color:#F2A38C;margin:0 0 9px}
+h1{font-size:clamp(28px,4.6vw,46px);line-height:1.03;letter-spacing:-.028em;font-weight:700;margin:0;
+  text-wrap:balance;color:#fff}
+.hero-sub{color:#D6E0E6;margin:10px 0 0;max-width:60ch;font-size:15px}
+
+h2{font-size:clamp(20px,2.7vw,27px);letter-spacing:-.02em;margin:0 0 4px;font-weight:700;text-wrap:balance}
+section{padding:46px 0;border-bottom:1px solid var(--rule)}
+.sec-no{font-family:ui-monospace,Menlo,monospace;font-size:11px;letter-spacing:.16em;
+  text-transform:uppercase;color:var(--muted);margin:0 0 10px}
+.lede{color:var(--ink-2);max-width:66ch;margin:10px 0 24px}
+
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));border:1px solid var(--rule);margin:18px 0 6px}
+.stats>div{padding:15px 17px;border-right:1px solid var(--rule-2)}
+.stats>div:last-child{border-right:none}
+.stats .lab{font-family:ui-monospace,Menlo,monospace;font-size:10px;letter-spacing:.13em;
+  text-transform:uppercase;color:var(--muted)}
+.stats .v{font-family:ui-monospace,Menlo,monospace;font-size:22px;font-weight:600;letter-spacing:-.02em;margin-top:3px}
+.stats p{margin:4px 0 0;font-size:12.5px;color:var(--ink-2)}
+
+/* day cards */
+.day{display:grid;grid-template-columns:190px 1fr;gap:0;border:1px solid var(--rule);margin-bottom:14px;
+  background:var(--surface);overflow:hidden}
+.day img{width:100%;height:100%;min-height:150px;object-fit:cover}
+.day-body{padding:15px 18px}
+.day-head{display:flex;flex-wrap:wrap;gap:10px;align-items:baseline;margin-bottom:5px}
+.day-date{font-family:ui-monospace,Menlo,monospace;font-size:12px;color:var(--accent);font-weight:600}
+.day-city{font-size:17px;font-weight:700;letter-spacing:-.015em}
+.day-country{font-family:ui-monospace,Menlo,monospace;font-size:10px;letter-spacing:.1em;
+  text-transform:uppercase;color:var(--muted)}
+.day-body p{margin:0 0 9px;font-size:14px;color:var(--ink-2)}
+.meta{display:flex;flex-wrap:wrap;gap:7px}
+.chip{display:inline-block;font-family:ui-monospace,Menlo,monospace;font-size:10px;letter-spacing:.07em;
+  text-transform:uppercase;padding:2px 7px;border:1px solid currentColor;white-space:nowrap}
+.c-free{color:var(--moss)}.c-res{color:var(--warn)}.c-no{color:var(--accent)}
+.c-bed{color:var(--glacier)}.c-cost{color:var(--ink-2)}
+
+/* trip cards on the hub */
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px;margin-top:22px}
+.card{border:1px solid var(--rule);background:var(--surface);text-decoration:none;color:inherit;
+  display:flex;flex-direction:column;transition:border-color .16s}
+.card:hover,.card:focus-visible{border-color:var(--accent);outline:none}
+.card img{width:100%;height:172px;object-fit:cover}
+.card-b{padding:16px 18px;display:flex;flex-direction:column;gap:7px;flex:1}
+.card h3{margin:0;font-size:19px;letter-spacing:-.02em}
+.card .when{font-family:ui-monospace,Menlo,monospace;font-size:11px;color:var(--accent);letter-spacing:.04em}
+.card p{margin:0;font-size:13.5px;color:var(--ink-2);flex:1}
+.card .foot{display:flex;justify-content:space-between;font-family:ui-monospace,Menlo,monospace;
+  font-size:11px;color:var(--muted);border-top:1px solid var(--rule-2);padding-top:9px;margin-top:3px}
+
+/* photo strip */
+.strip{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px;margin:18px 0}
+.strip figure{margin:0;position:relative;overflow:hidden}
+.strip img{width:100%;height:132px;object-fit:cover}
+.strip figcaption{position:absolute;inset:auto 0 0 0;padding:16px 9px 6px;color:#fff;font-size:11px;
+  font-family:ui-monospace,Menlo,monospace;letter-spacing:.05em;
+  background:linear-gradient(to top,rgba(6,12,17,.9),transparent)}
+
+table{width:100%;border-collapse:collapse;font-size:14px;margin:14px 0}
+.scroll{overflow-x:auto}
+th{text-align:left;font-family:ui-monospace,Menlo,monospace;font-size:10px;letter-spacing:.13em;
+  text-transform:uppercase;color:var(--muted);font-weight:400;padding:0 12px 8px 0;
+  border-bottom:1px solid var(--rule);vertical-align:bottom}
+td{padding:10px 12px 10px 0;border-bottom:1px solid var(--rule-2);vertical-align:top}
+td.num,th.num{text-align:right;font-family:ui-monospace,Menlo,monospace;font-variant-numeric:tabular-nums;padding-right:0}
+tr.tot td{border-top:2px solid var(--ink);border-bottom:none;font-weight:700;padding-top:11px}
+.sm{font-size:12.5px;color:var(--muted);display:block;margin-top:2px}
+
+.verdict{border:1px solid var(--glacier);padding:17px 20px;margin:20px 0;background:var(--surface-2)}
+.verdict .lab{font-family:ui-monospace,Menlo,monospace;font-size:10px;letter-spacing:.15em;
+  text-transform:uppercase;color:var(--glacier);margin-bottom:6px}
+.verdict p{margin:0;font-size:14.5px}.verdict p+p{margin-top:9px}
+.warnbox{border-left:3px solid var(--warn);background:var(--surface-2);padding:15px 19px;margin:18px 0;font-size:14px;color:var(--ink-2)}
+.warnbox strong{color:var(--ink)}
+ul{padding-left:19px}li{margin-bottom:6px;color:var(--ink-2)}li strong{color:var(--ink)}
+footer{padding:30px 0 66px;font-size:12px;color:var(--muted)}
+@media (max-width:620px){ .day{grid-template-columns:1fr} .day img{height:170px;min-height:0} }
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style></head><body>
+<nav><div><a href="index.html">The OS</a><a href="trips.html">Trips</a><a href="trip-belt.html">Central Belt</a><a href="trip-iceland.html">Iceland</a><a href="trip-iberia.html">Iberia</a><a href="trip-weekends.html" class="on">Weekends</a><a href="budget.html">Costs</a></div></nav>
+<div class="hero">
+  <img class="hero-img" src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/f9/Pr%C3%A9fecture_de_Haute-Savoie_%28Annecy%29_%28cropped%29.JPG/1280px-Pr%C3%A9fecture_de_Haute-Savoie_%28Annecy%29_%28cropped%29.JPG" alt="" loading="eager">
+  <div class="hero-cap"><div class="wrap">
+    <p class="eyebrow">Phase 3 · 5 October – 18 December 2026</p><h1>Eleven Fridays,<br>and the free Monday</h1><p class="hero-sub">Your timetable leaves Monday open four weeks in five. That turns every weekend into three nights — and four of the eleven cost nothing in rail at all.</p>
+  </div></div>
+</div>
+<main class="wrap">
+
+<section>
+  <p class="sec-no">§ — Phase 3 · 5 October – 18 December</p>
+  <h2>The finding this whole plan turns on</h2>
+  <p class="lede">Reading the GEM timetable for your six courses gives one fact worth more than any other in
+  this document: <strong>Monday is free about 80% of the time.</strong> Saturday and Sunday always are. Tuesday,
+  Wednesday and Friday are locked at 90%.</p>
+  <p class="lede">So the travel unit is not a weekend — it is <strong>Friday evening to Monday night</strong>,
+  eleven times over. Most exchange students never work this out and take Saturday to Sunday all semester. That
+  free Monday is the difference between Annecy again and Rome.</p>
+  <div class="stats"><div><span class="lab">Windows</span><div class="v">11</div><p>Friday evening to Monday night, 5 Oct – 18 Dec.</p></div><div><span class="lab">Costing €0 in rail</span><div class="v">4</div><p>French regional trains need no reservation at all.</p></div><div><span class="lab">Reservation budget</span><div class="v">€250</div><p>The true price of an 'unlimited' pass, across the term.</p></div><div><span class="lab">Pass expires</span><div class="v">~10 Dec</div><p>Front-load the long hauls; December runs on buses.</p></div></div>
+  <div class="warnbox"><strong>Two dates constrain everything.</strong> The
+  <strong>Eco-Design intensive runs 14–28 October</strong> — five sessions in a fortnight, so mid-October is the
+  worst possible time to miss a weekday. And your <strong>pass expires around 10 December</strong>, so every
+  reservation-heavy long haul belongs in October and November.</div>
+</section>
+<section>
+  <p class="sec-no">§ — Window by window</p>
+  <h2>Eleven Fridays</h2>
+  <div class="day"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/97/Lyon-part-dieu-2023.jpg/1280px-Lyon-part-dieu-2023.jpg" alt="Lyon" loading="lazy">
+<div class="day-body"><div class="day-head"><span class="day-date">G01 · 9–12 Oct</span>
+<span class="day-city">Lyon</span><span class="day-country">France</span></div>
+<p>Just moved in, term just started — stay close. Lyon is 1h15 on a regional train, which needs no reservation, so this weekend costs you a train fare of exactly nothing. Vieux Lyon, the traboules, and the Indian grocers you'll be relying on all semester.</p><div class="meta"><span class="chip c-free">€0 rail</span><span class="chip c-cost">€50</span></div></div></div><div class="day"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/ae/Torino_Piazza_Castello_11.jpg/1280px-Torino_Piazza_Castello_11.jpg" alt="Turin" loading="lazy">
+<div class="day-body"><div class="day-head"><span class="day-date">G02 · 16–19 Oct</span>
+<span class="day-city">Turin</span><span class="day-country">Italy</span></div>
+<p>First border crossing. Under three hours, €10 reservation. Baroque arcades, the Egyptian Museum (second only to Cairo's), and aperitivo culture that feeds you dinner for the price of a drink. ⚠ Eco-Design intensive is running 14–28 Oct — weekend only, no weekday absence.</p><div class="meta"><span class="chip c-res">pass + €10</span><span class="chip c-cost">€136</span></div></div></div><div class="day"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/f9/Pr%C3%A9fecture_de_Haute-Savoie_%28Annecy%29_%28cropped%29.JPG/1280px-Pr%C3%A9fecture_de_Haute-Savoie_%28Annecy%29_%28cropped%29.JPG" alt="Annecy" loading="lazy">
+<div class="day-body"><div class="day-head"><span class="day-date">G03 · 23–26 Oct</span>
+<span class="day-city">Annecy</span><span class="day-country">France</span></div>
+<p>The Venice of the Alps, an hour and a half away and free on the pass. Turquoise lake, a canal-threaded old town, and mountains straight out of the water. ⚠ Eco-Design still running — keep this one to the weekend.</p><div class="meta"><span class="chip c-free">€0 rail</span><span class="chip c-cost">€134</span></div></div></div><div class="day"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/70/Milan_Cathedral_from_Piazza_del_Duomo.jpg/1280px-Milan_Cathedral_from_Piazza_del_Duomo.jpg" alt="Milan" loading="lazy">
+<div class="day-body"><div class="day-head"><span class="day-date">G04 · 30 Oct–2 Nov</span>
+<span class="day-city">Milan</span><span class="day-country">Italy</span></div>
+<p>Toussaint weekend, when the whole of France travels — reserve four weeks out or don't bother. The Duomo, the Galleria, and Lake Como an hour north if the city feels thin.</p><div class="meta"><span class="chip c-res">pass + €13</span><span class="chip c-cost">€217</span></div></div></div><div class="day"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/f2/Lisboa_-_Portugal_%2852597836992%29.jpg/1280px-Lisboa_-_Portugal_%2852597836992%29.jpg" alt="IBERIA — 9 days" loading="lazy">
+<div class="day-body"><div class="day-head"><span class="day-date">G05 · 7–15 Nov</span>
+<span class="day-city">IBERIA — 9 days</span><span class="day-country">Spain · Portugal</span></div>
+<p>The block. Barcelona, Madrid, Lisbon and Porto across nine days, built around Armistice Day on Wednesday 11 November. The cheapest week in the entire term to miss class — three sessions for two countries.</p><div class="meta"><span class="chip c-no">see full page</span><span class="chip c-cost">€750</span></div></div></div><div class="day"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/14/Goldswil-Viadukt_Panorama_mit_Interlaken_im_Hintergrund_2.jpg/1280px-Goldswil-Viadukt_Panorama_mit_Interlaken_im_Hintergrund_2.jpg" alt="Zurich · Bern · Interlaken" loading="lazy">
+<div class="day-body"><div class="day-head"><span class="day-date">G06 · 20–23 Nov</span>
+<span class="day-city">Zurich · Bern · Interlaken</span><span class="day-country">Switzerland</span></div>
+<p>The quiet bonus of a Eurail pass: Swiss trains almost never require reservations, so the country is free to reach and only expensive once you're standing in it. Carry food. Interlaken between two lakes is the reason to go.</p><div class="meta"><span class="chip c-free">€0 rail</span><span class="chip c-cost">€330</span></div></div></div><div class="day"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/85/View_of_%C3%89glise_Saint-Martin_%2843833049001%29.jpg/1280px-View_of_%C3%89glise_Saint-Martin_%2843833049001%29.jpg" alt="Strasbourg · Colmar" loading="lazy">
+<div class="day-body"><div class="day-head"><span class="day-date">G07 · 27–30 Nov</span>
+<span class="day-city">Strasbourg · Colmar</span><span class="day-country">France · Luxembourg</span></div>
+<p>Alsace Christmas markets open this weekend and they are the oldest and best in Europe. Colmar onward from Strasbourg is free regional rail. Bolt on Luxembourg City — two hours north — and collect a country for half a day.</p><div class="meta"><span class="chip c-res">pass + €15</span><span class="chip c-cost">€213</span></div></div></div><div class="day"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/97/Lyon-part-dieu-2023.jpg/1280px-Lyon-part-dieu-2023.jpg" alt="Lyon — Fête des Lumières" loading="lazy">
+<div class="day-body"><div class="day-head"><span class="day-date">G08 · 4–7 Dec</span>
+<span class="day-city">Lyon — Fête des Lumières</span><span class="day-country">France</span></div>
+<p>★ 5–8 December. Four nights when the entire city becomes a light installation — one of the largest festivals on earth, free to attend, on a train that costs you nothing. This one is not a choice.</p><div class="meta"><span class="chip c-free">€0 rail</span><span class="chip c-cost">€190</span></div></div></div><div class="day"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/9b/Alpe-dhuez-arrivee-tour.jpg/1280px-Alpe-dhuez-arrivee-tour.jpg" alt="Alpe d'Huez" loading="lazy">
+<div class="day-body"><div class="day-head"><span class="day-date">G09 · 11–14 Dec</span>
+<span class="day-city">Alpe d'Huez</span><span class="day-country">France</span></div>
+<p>The pass has expired by now (~10 December), which is fine because this one runs on a bus. Season opener, 1h15 away, and you have been living beneath these mountains for two months without skiing them.</p><div class="meta"><span class="chip c-no">bus €30</span><span class="chip c-cost">€200</span></div></div></div><div class="day"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/23/Panorama_grenoble.png/1280px-Panorama_grenoble.png" alt="Grenoble" loading="lazy">
+<div class="day-body"><div class="day-head"><span class="day-date">G10 · 15–17 Dec</span>
+<span class="day-city">Grenoble</span><span class="day-country">France</span></div>
+<p>Final week of term. Exams, hand-ins, and the Bastille cable car you have been meaning to take since October.</p><div class="meta"><span class="chip c-cost">—</span><span class="chip c-cost">€18</span></div></div></div><div class="day"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/4b/La_Tour_Eiffel_vue_de_la_Tour_Saint-Jacques%2C_Paris_ao%C3%BBt_2014_%282%29.jpg/1280px-La_Tour_Eiffel_vue_de_la_Tour_Saint-Jacques%2C_Paris_ao%C3%BBt_2014_%282%29.jpg" alt="→ Paris" loading="lazy">
+<div class="day-body"><div class="day-head"><span class="day-date">G11 · 18–21 Dec</span>
+<span class="day-city">→ Paris</span><span class="day-country">France</span></div>
+<p>Term ends the 18th. Pack, ship what won't fly, then up to Paris on the 21st on a ticket bought back in September — off-pass and at Christmas peak. Sleep near CDG; a 14:25 flight is not worth a dawn train through the Alps in December.</p><div class="meta"><span class="chip c-no">off-pass €80</span><span class="chip c-cost">€140</span></div></div></div>
+</section>
+<footer>Photographs from Wikimedia Commons under their respective licences. Costs are per person, hostel dorms or shared rooms, booked three or more weeks ahead — planning estimates, not quotes. Rail costs are reservation fees only; the Eurail Global Pass (3-month continuous) covers the seat itself.</footer>
+</main></body></html>

@@ -1,0 +1,223 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>The Central Belt — Grenoble Exchange OS</title>
+<style>
+:root{
+  --ground:#E8ECEE;--surface:#FBFCFC;--surface-2:#F1F4F5;
+  --ink:#141E27;--ink-2:#41525F;--muted:#75868F;
+  --rule:#CDD6DA;--rule-2:#DFE6E9;
+  --accent:#C13F24;--glacier:#26707E;--ice:#3A6E9E;--moss:#4A6B3A;--warn:#8A5A0C;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --ground:#0E161C;--surface:#151F27;--surface-2:#1B2831;
+  --ink:#E3EAEE;--ink-2:#A8B8C1;--muted:#7B8C96;
+  --rule:#2A3A45;--rule-2:#223039;
+  --accent:#F06742;--glacier:#54AEBE;--ice:#6FA8D6;--moss:#8FB07A;--warn:#D8A93C;
+}}
+:root[data-theme="dark"]{
+  --ground:#0E161C;--surface:#151F27;--surface-2:#1B2831;
+  --ink:#E3EAEE;--ink-2:#A8B8C1;--muted:#7B8C96;
+  --rule:#2A3A45;--rule-2:#223039;
+  --accent:#F06742;--glacier:#54AEBE;--ice:#6FA8D6;--moss:#8FB07A;--warn:#D8A93C;
+}
+*{box-sizing:border-box}
+body{background:var(--ground);color:var(--ink);margin:0;font-size:15px;line-height:1.6;
+  font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;-webkit-font-smoothing:antialiased}
+img{max-width:100%;display:block}
+.mono{font-family:ui-monospace,"SF Mono",SFMono-Regular,Menlo,Consolas,monospace;font-variant-numeric:tabular-nums}
+.wrap{max-width:1060px;margin:0 auto;padding:0 20px}
+a{color:var(--accent)}
+nav{position:sticky;top:0;z-index:30;background:var(--surface);border-bottom:1px solid var(--rule);overflow-x:auto}
+nav div{max-width:1060px;margin:0 auto;padding:11px 20px;display:flex;gap:20px;white-space:nowrap}
+nav a{font-family:ui-monospace,Menlo,monospace;font-size:11px;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--ink-2);text-decoration:none;padding-bottom:2px;border-bottom:2px solid transparent}
+nav a:hover,nav a:focus-visible{color:var(--accent);border-bottom-color:var(--accent);outline:none}
+nav a.on{color:var(--accent);border-bottom-color:var(--accent)}
+
+.hero{position:relative;margin-top:0;border-bottom:2px solid var(--ink)}
+.hero-img{width:100%;height:clamp(210px,34vw,380px);object-fit:cover;filter:saturate(.92)}
+.hero-cap{position:absolute;inset:auto 0 0 0;padding:26px 0 20px;
+  background:linear-gradient(to top,rgba(6,12,17,.92),rgba(6,12,17,.55) 55%,transparent)}
+.hero-cap .wrap{color:#fff}
+.eyebrow{font-family:ui-monospace,Menlo,monospace;font-size:11px;letter-spacing:.18em;
+  text-transform:uppercase;color:#F2A38C;margin:0 0 9px}
+h1{font-size:clamp(28px,4.6vw,46px);line-height:1.03;letter-spacing:-.028em;font-weight:700;margin:0;
+  text-wrap:balance;color:#fff}
+.hero-sub{color:#D6E0E6;margin:10px 0 0;max-width:60ch;font-size:15px}
+
+h2{font-size:clamp(20px,2.7vw,27px);letter-spacing:-.02em;margin:0 0 4px;font-weight:700;text-wrap:balance}
+section{padding:46px 0;border-bottom:1px solid var(--rule)}
+.sec-no{font-family:ui-monospace,Menlo,monospace;font-size:11px;letter-spacing:.16em;
+  text-transform:uppercase;color:var(--muted);margin:0 0 10px}
+.lede{color:var(--ink-2);max-width:66ch;margin:10px 0 24px}
+
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));border:1px solid var(--rule);margin:18px 0 6px}
+.stats>div{padding:15px 17px;border-right:1px solid var(--rule-2)}
+.stats>div:last-child{border-right:none}
+.stats .lab{font-family:ui-monospace,Menlo,monospace;font-size:10px;letter-spacing:.13em;
+  text-transform:uppercase;color:var(--muted)}
+.stats .v{font-family:ui-monospace,Menlo,monospace;font-size:22px;font-weight:600;letter-spacing:-.02em;margin-top:3px}
+.stats p{margin:4px 0 0;font-size:12.5px;color:var(--ink-2)}
+
+/* day cards */
+.day{display:grid;grid-template-columns:190px 1fr;gap:0;border:1px solid var(--rule);margin-bottom:14px;
+  background:var(--surface);overflow:hidden}
+.day img{width:100%;height:100%;min-height:150px;object-fit:cover}
+.day-body{padding:15px 18px}
+.day-head{display:flex;flex-wrap:wrap;gap:10px;align-items:baseline;margin-bottom:5px}
+.day-date{font-family:ui-monospace,Menlo,monospace;font-size:12px;color:var(--accent);font-weight:600}
+.day-city{font-size:17px;font-weight:700;letter-spacing:-.015em}
+.day-country{font-family:ui-monospace,Menlo,monospace;font-size:10px;letter-spacing:.1em;
+  text-transform:uppercase;color:var(--muted)}
+.day-body p{margin:0 0 9px;font-size:14px;color:var(--ink-2)}
+.meta{display:flex;flex-wrap:wrap;gap:7px}
+.chip{display:inline-block;font-family:ui-monospace,Menlo,monospace;font-size:10px;letter-spacing:.07em;
+  text-transform:uppercase;padding:2px 7px;border:1px solid currentColor;white-space:nowrap}
+.c-free{color:var(--moss)}.c-res{color:var(--warn)}.c-no{color:var(--accent)}
+.c-bed{color:var(--glacier)}.c-cost{color:var(--ink-2)}
+
+/* trip cards on the hub */
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px;margin-top:22px}
+.card{border:1px solid var(--rule);background:var(--surface);text-decoration:none;color:inherit;
+  display:flex;flex-direction:column;transition:border-color .16s}
+.card:hover,.card:focus-visible{border-color:var(--accent);outline:none}
+.card img{width:100%;height:172px;object-fit:cover}
+.card-b{padding:16px 18px;display:flex;flex-direction:column;gap:7px;flex:1}
+.card h3{margin:0;font-size:19px;letter-spacing:-.02em}
+.card .when{font-family:ui-monospace,Menlo,monospace;font-size:11px;color:var(--accent);letter-spacing:.04em}
+.card p{margin:0;font-size:13.5px;color:var(--ink-2);flex:1}
+.card .foot{display:flex;justify-content:space-between;font-family:ui-monospace,Menlo,monospace;
+  font-size:11px;color:var(--muted);border-top:1px solid var(--rule-2);padding-top:9px;margin-top:3px}
+
+/* photo strip */
+.strip{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px;margin:18px 0}
+.strip figure{margin:0;position:relative;overflow:hidden}
+.strip img{width:100%;height:132px;object-fit:cover}
+.strip figcaption{position:absolute;inset:auto 0 0 0;padding:16px 9px 6px;color:#fff;font-size:11px;
+  font-family:ui-monospace,Menlo,monospace;letter-spacing:.05em;
+  background:linear-gradient(to top,rgba(6,12,17,.9),transparent)}
+
+table{width:100%;border-collapse:collapse;font-size:14px;margin:14px 0}
+.scroll{overflow-x:auto}
+th{text-align:left;font-family:ui-monospace,Menlo,monospace;font-size:10px;letter-spacing:.13em;
+  text-transform:uppercase;color:var(--muted);font-weight:400;padding:0 12px 8px 0;
+  border-bottom:1px solid var(--rule);vertical-align:bottom}
+td{padding:10px 12px 10px 0;border-bottom:1px solid var(--rule-2);vertical-align:top}
+td.num,th.num{text-align:right;font-family:ui-monospace,Menlo,monospace;font-variant-numeric:tabular-nums;padding-right:0}
+tr.tot td{border-top:2px solid var(--ink);border-bottom:none;font-weight:700;padding-top:11px}
+.sm{font-size:12.5px;color:var(--muted);display:block;margin-top:2px}
+
+.verdict{border:1px solid var(--glacier);padding:17px 20px;margin:20px 0;background:var(--surface-2)}
+.verdict .lab{font-family:ui-monospace,Menlo,monospace;font-size:10px;letter-spacing:.15em;
+  text-transform:uppercase;color:var(--glacier);margin-bottom:6px}
+.verdict p{margin:0;font-size:14.5px}.verdict p+p{margin-top:9px}
+.warnbox{border-left:3px solid var(--warn);background:var(--surface-2);padding:15px 19px;margin:18px 0;font-size:14px;color:var(--ink-2)}
+.warnbox strong{color:var(--ink)}
+ul{padding-left:19px}li{margin-bottom:6px;color:var(--ink-2)}li strong{color:var(--ink)}
+footer{padding:30px 0 66px;font-size:12px;color:var(--muted)}
+@media (max-width:620px){ .day{grid-template-columns:1fr} .day img{height:170px;min-height:0} }
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style></head><body>
+<nav><div><a href="index.html">The OS</a><a href="trips.html">Trips</a><a href="trip-belt.html" class="on">Central Belt</a><a href="trip-iceland.html">Iceland</a><a href="trip-iberia.html">Iberia</a><a href="trip-weekends.html">Weekends</a><a href="budget.html">Costs</a></div></nav>
+<div class="hero">
+  <img class="hero-img" src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a7/Prague_%286365119737%29.jpg/1280px-Prague_%286365119737%29.jpg" alt="" loading="eager">
+  <div class="hero-cap"><div class="wrap">
+    <p class="eyebrow">Phase 1 · 11 – 24 September 2026</p><h1>Paris to Gdańsk,<br>seven countries by rail</h1><p class="hero-sub">Fourteen days east across Central Europe, routed around Oktoberfest and built on the fact that almost none of these trains charge a pass-holder anything.</p>
+  </div></div>
+</div>
+<main class="wrap">
+
+<section>
+  <p class="sec-no">§ — Phase 1 · 11 – 24 September</p>
+  <h2>Seven countries, and the pass pays for almost none of it</h2>
+  <p class="lede">This route exists because of one fact: in Germany, Austria, Slovakia, Hungary, Czechia and
+  Poland, intercity trains carry a rail pass with <strong>no reservation and no fee</strong>. You board and sit
+  down. That is why the fortnight goes east rather than north — the same 14 days in Scandinavia would cost
+  roughly three times as much and reach three countries instead of seven.</p>
+  <div class="stats"><div><span class="lab">Countries</span><div class="v">7</div><p>France, Germany, Austria, Slovakia, Hungary, Czechia, Poland.</p></div><div><span class="lab">Reservation fees</span><div class="v">€13</div><p>One TGV out of Paris. Every other train is free on the pass.</p></div><div><span class="lab">Beds</span><div class="v">13 nights</div><p>Hostel dorms throughout, booked three weeks ahead.</p></div><div><span class="lab">All-in</span><div class="v">≈ €875</div><p>Beds, food, local transport, entries and a contingency.</p></div></div>
+  <div class="warnbox"><strong>Routed around Oktoberfest.</strong> The 2026 festival runs 19 September to
+  4 October and Munich beds go three to four times normal from the 19th. This itinerary has you in Munich on
+  the 13th–15th and out of Bavaria before the surge, moving east into progressively cheaper countries as the
+  fortnight goes on.</div>
+</section>
+<section>
+  <p class="sec-no">§ — Day by day</p>
+  <h2>The fortnight</h2>
+  <div class="day"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/4b/La_Tour_Eiffel_vue_de_la_Tour_Saint-Jacques%2C_Paris_ao%C3%BBt_2014_%282%29.jpg/1280px-La_Tour_Eiffel_vue_de_la_Tour_Saint-Jacques%2C_Paris_ao%C3%BBt_2014_%282%29.jpg" alt="Paris" loading="lazy">
+<div class="day-body"><div class="day-head"><span class="day-date">Fri 11 Sep</span>
+<span class="day-city">Paris</span><span class="day-country">France</span></div>
+<p>Land CDG 09:20 after an overnight through Dubai. Put the 23 kg case into storage near Gare de Lyon — you will not see it again until 3 October. Then do nothing ambitious: this day is for beating jet lag, not for sightseeing.</p><div class="meta"><span class="chip c-free">arrive</span><span class="chip c-bed">hostel · Gare du Nord</span><span class="chip c-cost">€45</span></div></div></div>
+<div class="day"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/ea/Strasbourg_Cathedral.jpg/1280px-Strasbourg_Cathedral.jpg" alt="Strasbourg" loading="lazy">
+<div class="day-body"><div class="day-head"><span class="day-date">Sat 12 Sep</span>
+<span class="day-city">Strasbourg</span><span class="day-country">France</span></div>
+<p>TGV, 1h50. Petite France's canals and the astronomical clock in the cathedral. Half a day is genuinely enough, and it puts you on the German border for tomorrow.</p><div class="meta"><span class="chip c-res">TGV res €13</span><span class="chip c-bed">hostel</span><span class="chip c-cost">€50</span></div></div></div>
+<div class="day"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d3/Stadtbild_M%C3%BCnchen.jpg/1280px-Stadtbild_M%C3%BCnchen.jpg" alt="Munich" loading="lazy">
+<div class="day-body"><div class="day-head"><span class="day-date">Sun 13 Sep</span>
+<span class="day-city">Munich</span><span class="day-country">Germany</span></div>
+<p>Via Stuttgart on ICE — and from here until Poland you simply board trains without paying anything more. Marienplatz, the Englischer Garten, and the surfers on the Eisbach.</p><div class="meta"><span class="chip c-free">no reservation</span><span class="chip c-bed">hostel · 2 nights</span><span class="chip c-cost">€35</span></div></div></div>
+<div class="day"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d3/Stadtbild_M%C3%BCnchen.jpg/1280px-Stadtbild_M%C3%BCnchen.jpg" alt="Munich" loading="lazy">
+<div class="day-body"><div class="day-head"><span class="day-date">Mon 14 Sep</span>
+<span class="day-city">Munich</span><span class="day-country">Germany</span></div>
+<p>A full day at pre-festival prices. The Deutsches Museum is the largest science museum on earth and worth half a day on its own; Nymphenburg for the other half. Oktoberfest opens on the 19th and beds triple — you are deliberately gone before then.</p><div class="meta"><span class="chip c-free">free day</span><span class="chip c-bed">same hostel</span><span class="chip c-cost">€45</span></div></div></div>
+<div class="day"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/91/Salzburg_%2848489551981%29.jpg/1280px-Salzburg_%2848489551981%29.jpg" alt="Salzburg → Vienna" loading="lazy">
+<div class="day-body"><div class="day-head"><span class="day-date">Tue 15 Sep</span>
+<span class="day-city">Salzburg → Vienna</span><span class="day-country">Austria</span></div>
+<p>Munich to Salzburg is 1h50. Leave the bag in a station locker, walk the Altstadt and Mirabell gardens for four hours, then Railjet on to Vienna in the evening. Two cities, one travel day, no reservation on either.</p><div class="meta"><span class="chip c-free">no reservation</span><span class="chip c-bed">hostel · Vienna, 2 nights</span><span class="chip c-cost">€50</span></div></div></div>
+<div class="day"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5b/Schoenbrunn_philharmoniker_2012.jpg/1280px-Schoenbrunn_philharmoniker_2012.jpg" alt="Vienna" loading="lazy">
+<div class="day-body"><div class="day-head"><span class="day-date">Wed 16 Sep</span>
+<span class="day-city">Vienna</span><span class="day-country">Austria</span></div>
+<p>Schönbrunn in the morning before the queues, the Belvedere for Klimt, then the Naschmarkt. Vienna's coffee houses are a UNESCO-listed institution and the cheapest way to spend three hours indoors.</p><div class="meta"><span class="chip c-free">free day</span><span class="chip c-bed">same hostel</span><span class="chip c-cost">€45</span></div></div></div>
+<div class="day"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/4e/Slovakia_bratislava.jpg/1280px-Slovakia_bratislava.jpg" alt="Bratislava → Budapest" loading="lazy">
+<div class="day-body"><div class="day-head"><span class="day-date">Thu 17 Sep</span>
+<span class="day-city">Bratislava → Budapest</span><span class="day-country">Slovakia · Hungary</span></div>
+<p>Vienna to Bratislava is an hour. Break the journey, walk the old town and the castle in three hours, and you have added an entire country to the semester for the price of nothing. Continue to Budapest that evening.</p><div class="meta"><span class="chip c-free">+1 country free</span><span class="chip c-bed">hostel · Budapest, 2 nights</span><span class="chip c-cost">€40</span></div></div></div>
+<div class="day"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/View_from_Gell%C3%A9rt_Hill_to_the_Danube%2C_Hungary_-_Budapest_%2828493220635%29.jpg/1280px-View_from_Gell%C3%A9rt_Hill_to_the_Danube%2C_Hungary_-_Budapest_%2828493220635%29.jpg" alt="Budapest" loading="lazy">
+<div class="day-body"><div class="day-head"><span class="day-date">Fri 18 Sep</span>
+<span class="day-city">Budapest</span><span class="day-country">Hungary</span></div>
+<p>Széchenyi thermal baths in the morning — go early, it is the single best-value thing in Central Europe. Buda Castle and Fisherman's Bastion for the view back over the Danube, ruin bars in Erzsébetváros after dark.</p><div class="meta"><span class="chip c-free">free day</span><span class="chip c-bed">same hostel</span><span class="chip c-cost">€40</span></div></div></div>
+<div class="day"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a7/Prague_%286365119737%29.jpg/1280px-Prague_%286365119737%29.jpg" alt="Prague" loading="lazy">
+<div class="day-body"><div class="day-head"><span class="day-date">Sat 19 Sep</span>
+<span class="day-city">Prague</span><span class="day-country">Czechia</span></div>
+<p>A long but reservation-free run north. Arrive with the evening free — the Charles Bridge is genuinely worth seeing at night, when the day-trip crowds have gone.</p><div class="meta"><span class="chip c-free">no reservation</span><span class="chip c-bed">hostel · 2 nights</span><span class="chip c-cost">€45</span></div></div></div>
+<div class="day"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a7/Prague_%286365119737%29.jpg/1280px-Prague_%286365119737%29.jpg" alt="Prague" loading="lazy">
+<div class="day-body"><div class="day-head"><span class="day-date">Sun 20 Sep</span>
+<span class="day-city">Prague</span><span class="day-country">Czechia</span></div>
+<p>Old Town Square and the astronomical clock early, then Petřín hill for the view. Prague Castle is the largest ancient castle complex in the world and absorbs an entire afternoon.</p><div class="meta"><span class="chip c-free">free day</span><span class="chip c-bed">same hostel</span><span class="chip c-cost">€40</span></div></div></div>
+<div class="day"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/f2/Wroclaw-_Most_Grunwaldzki.jpg/1280px-Wroclaw-_Most_Grunwaldzki.jpg" alt="Wrocław" loading="lazy">
+<div class="day-body"><div class="day-head"><span class="day-date">Mon 21 Sep</span>
+<span class="day-city">Wrocław</span><span class="day-country">Poland</span></div>
+<p>Into Poland, where your money suddenly goes much further. Wrocław has over 600 tiny bronze dwarves hidden across the city and a market square that rivals Kraków's with a fraction of the crowd.</p><div class="meta"><span class="chip c-free">no reservation</span><span class="chip c-bed">hostel</span><span class="chip c-cost">€35</span></div></div></div>
+<div class="day"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a3/Krakow_Rynek_Glowny_panorama_2.jpg/1280px-Krakow_Rynek_Glowny_panorama_2.jpg" alt="Kraków" loading="lazy">
+<div class="day-body"><div class="day-head"><span class="day-date">Tue 22 Sep</span>
+<span class="day-city">Kraków</span><span class="day-country">Poland</span></div>
+<p>Wawel Castle, the Cloth Hall, and the Kazimierz quarter in the evening. If you want to visit Auschwitz-Birkenau, this is the base — book the guided entry well in advance, it sells out.</p><div class="meta"><span class="chip c-free">no reservation</span><span class="chip c-bed">hostel</span><span class="chip c-cost">€35</span></div></div></div>
+<div class="day"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/81/Calle_Dlugie_Pobrzeze%2C_Gdansk%2C_Polonia%2C_2013-05-20%2C_DD_06.jpg/1280px-Calle_Dlugie_Pobrzeze%2C_Gdansk%2C_Polonia%2C_2013-05-20%2C_DD_06.jpg" alt="Gdańsk" loading="lazy">
+<div class="day-body"><div class="day-head"><span class="day-date">Wed 23 Sep</span>
+<span class="day-city">Gdańsk</span><span class="day-country">Poland</span></div>
+<p>The longest single leg of the fortnight — take a morning train and treat it as a rest day. Arrive on the Baltic in the late afternoon.</p><div class="meta"><span class="chip c-free">no reservation</span><span class="chip c-bed">hostel · 2 nights</span><span class="chip c-cost">€35</span></div></div></div>
+<div class="day"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/81/Calle_Dlugie_Pobrzeze%2C_Gdansk%2C_Polonia%2C_2013-05-20%2C_DD_06.jpg/1280px-Calle_Dlugie_Pobrzeze%2C_Gdansk%2C_Polonia%2C_2013-05-20%2C_DD_06.jpg" alt="Gdańsk" loading="lazy">
+<div class="day-body"><div class="day-head"><span class="day-date">Thu 24 Sep</span>
+<span class="day-city">Gdańsk</span><span class="day-country">Poland</span></div>
+<p>Długi Targ and the old Hanseatic waterfront, Westerplatte if the weather holds. Spend the evening repacking: tomorrow you fly to a country where the weather is a different sport entirely.</p><div class="meta"><span class="chip c-free">free day</span><span class="chip c-bed">same hostel</span><span class="chip c-cost">€35</span></div></div></div>
+</section>
+<section>
+  <p class="sec-no">§ — Money</p>
+  <h2>What it actually costs</h2>
+  <div class="scroll"><table>
+  <tr><th>Line</th><th>Detail</th><th class="num">€</th></tr>
+  <tr><td>Beds</td><td>13 nights, hostel dorms, €30 west → €18 in Poland<span class="sm">Book Munich and Prague earliest; both sell out</span></td><td class="num">330</td></tr>
+  <tr><td>Food</td><td>14 days at €18–22, cooking in hostel kitchens where you can</td><td class="num">280</td></tr>
+  <tr><td>Local transport</td><td>Metro, trams, the odd taxi</td><td class="num">70</td></tr>
+  <tr><td>Reservations</td><td>Paris→Strasbourg TGV. Everything else free on the pass</td><td class="num">13</td></tr>
+  <tr><td>Entries</td><td>Deutsches Museum, Schönbrunn, Széchenyi baths, Prague Castle</td><td class="num">110</td></tr>
+  <tr><td>Luggage storage</td><td>Paris, 23 days — collected on your way back from Iceland</td><td class="num">150</td></tr>
+  <tr class="tot"><td colspan="2">Fourteen days, seven countries</td><td class="num">≈ 875</td></tr>
+  </table></div>
+  <div class="verdict"><p class="lab">The one thing to get right</p>
+  <p><strong>You cannot do this carrying 35 kg.</strong> One 23 kg case goes into storage in Paris on day one
+  and a ~12 kg backpack travels. You collect the case on 3 October when the Iceland flight lands back at CDG —
+  which is precisely why Paris is the right storage city and Grenoble is the wrong one.</p></div>
+</section>
+<footer>Photographs from Wikimedia Commons under their respective licences. Costs are per person, hostel dorms or shared rooms, booked three or more weeks ahead — planning estimates, not quotes. Rail costs are reservation fees only; the Eurail Global Pass (3-month continuous) covers the seat itself.</footer>
+</main></body></html>

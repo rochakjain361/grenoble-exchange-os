@@ -1,0 +1,208 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Iceland — Grenoble Exchange OS</title>
+<style>
+:root{
+  --ground:#E8ECEE;--surface:#FBFCFC;--surface-2:#F1F4F5;
+  --ink:#141E27;--ink-2:#41525F;--muted:#75868F;
+  --rule:#CDD6DA;--rule-2:#DFE6E9;
+  --accent:#C13F24;--glacier:#26707E;--ice:#3A6E9E;--moss:#4A6B3A;--warn:#8A5A0C;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --ground:#0E161C;--surface:#151F27;--surface-2:#1B2831;
+  --ink:#E3EAEE;--ink-2:#A8B8C1;--muted:#7B8C96;
+  --rule:#2A3A45;--rule-2:#223039;
+  --accent:#F06742;--glacier:#54AEBE;--ice:#6FA8D6;--moss:#8FB07A;--warn:#D8A93C;
+}}
+:root[data-theme="dark"]{
+  --ground:#0E161C;--surface:#151F27;--surface-2:#1B2831;
+  --ink:#E3EAEE;--ink-2:#A8B8C1;--muted:#7B8C96;
+  --rule:#2A3A45;--rule-2:#223039;
+  --accent:#F06742;--glacier:#54AEBE;--ice:#6FA8D6;--moss:#8FB07A;--warn:#D8A93C;
+}
+*{box-sizing:border-box}
+body{background:var(--ground);color:var(--ink);margin:0;font-size:15px;line-height:1.6;
+  font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;-webkit-font-smoothing:antialiased}
+img{max-width:100%;display:block}
+.mono{font-family:ui-monospace,"SF Mono",SFMono-Regular,Menlo,Consolas,monospace;font-variant-numeric:tabular-nums}
+.wrap{max-width:1060px;margin:0 auto;padding:0 20px}
+a{color:var(--accent)}
+nav{position:sticky;top:0;z-index:30;background:var(--surface);border-bottom:1px solid var(--rule);overflow-x:auto}
+nav div{max-width:1060px;margin:0 auto;padding:11px 20px;display:flex;gap:20px;white-space:nowrap}
+nav a{font-family:ui-monospace,Menlo,monospace;font-size:11px;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--ink-2);text-decoration:none;padding-bottom:2px;border-bottom:2px solid transparent}
+nav a:hover,nav a:focus-visible{color:var(--accent);border-bottom-color:var(--accent);outline:none}
+nav a.on{color:var(--accent);border-bottom-color:var(--accent)}
+
+.hero{position:relative;margin-top:0;border-bottom:2px solid var(--ink)}
+.hero-img{width:100%;height:clamp(210px,34vw,380px);object-fit:cover;filter:saturate(.92)}
+.hero-cap{position:absolute;inset:auto 0 0 0;padding:26px 0 20px;
+  background:linear-gradient(to top,rgba(6,12,17,.92),rgba(6,12,17,.55) 55%,transparent)}
+.hero-cap .wrap{color:#fff}
+.eyebrow{font-family:ui-monospace,Menlo,monospace;font-size:11px;letter-spacing:.18em;
+  text-transform:uppercase;color:#F2A38C;margin:0 0 9px}
+h1{font-size:clamp(28px,4.6vw,46px);line-height:1.03;letter-spacing:-.028em;font-weight:700;margin:0;
+  text-wrap:balance;color:#fff}
+.hero-sub{color:#D6E0E6;margin:10px 0 0;max-width:60ch;font-size:15px}
+
+h2{font-size:clamp(20px,2.7vw,27px);letter-spacing:-.02em;margin:0 0 4px;font-weight:700;text-wrap:balance}
+section{padding:46px 0;border-bottom:1px solid var(--rule)}
+.sec-no{font-family:ui-monospace,Menlo,monospace;font-size:11px;letter-spacing:.16em;
+  text-transform:uppercase;color:var(--muted);margin:0 0 10px}
+.lede{color:var(--ink-2);max-width:66ch;margin:10px 0 24px}
+
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));border:1px solid var(--rule);margin:18px 0 6px}
+.stats>div{padding:15px 17px;border-right:1px solid var(--rule-2)}
+.stats>div:last-child{border-right:none}
+.stats .lab{font-family:ui-monospace,Menlo,monospace;font-size:10px;letter-spacing:.13em;
+  text-transform:uppercase;color:var(--muted)}
+.stats .v{font-family:ui-monospace,Menlo,monospace;font-size:22px;font-weight:600;letter-spacing:-.02em;margin-top:3px}
+.stats p{margin:4px 0 0;font-size:12.5px;color:var(--ink-2)}
+
+/* day cards */
+.day{display:grid;grid-template-columns:190px 1fr;gap:0;border:1px solid var(--rule);margin-bottom:14px;
+  background:var(--surface);overflow:hidden}
+.day img{width:100%;height:100%;min-height:150px;object-fit:cover}
+.day-body{padding:15px 18px}
+.day-head{display:flex;flex-wrap:wrap;gap:10px;align-items:baseline;margin-bottom:5px}
+.day-date{font-family:ui-monospace,Menlo,monospace;font-size:12px;color:var(--accent);font-weight:600}
+.day-city{font-size:17px;font-weight:700;letter-spacing:-.015em}
+.day-country{font-family:ui-monospace,Menlo,monospace;font-size:10px;letter-spacing:.1em;
+  text-transform:uppercase;color:var(--muted)}
+.day-body p{margin:0 0 9px;font-size:14px;color:var(--ink-2)}
+.meta{display:flex;flex-wrap:wrap;gap:7px}
+.chip{display:inline-block;font-family:ui-monospace,Menlo,monospace;font-size:10px;letter-spacing:.07em;
+  text-transform:uppercase;padding:2px 7px;border:1px solid currentColor;white-space:nowrap}
+.c-free{color:var(--moss)}.c-res{color:var(--warn)}.c-no{color:var(--accent)}
+.c-bed{color:var(--glacier)}.c-cost{color:var(--ink-2)}
+
+/* trip cards on the hub */
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px;margin-top:22px}
+.card{border:1px solid var(--rule);background:var(--surface);text-decoration:none;color:inherit;
+  display:flex;flex-direction:column;transition:border-color .16s}
+.card:hover,.card:focus-visible{border-color:var(--accent);outline:none}
+.card img{width:100%;height:172px;object-fit:cover}
+.card-b{padding:16px 18px;display:flex;flex-direction:column;gap:7px;flex:1}
+.card h3{margin:0;font-size:19px;letter-spacing:-.02em}
+.card .when{font-family:ui-monospace,Menlo,monospace;font-size:11px;color:var(--accent);letter-spacing:.04em}
+.card p{margin:0;font-size:13.5px;color:var(--ink-2);flex:1}
+.card .foot{display:flex;justify-content:space-between;font-family:ui-monospace,Menlo,monospace;
+  font-size:11px;color:var(--muted);border-top:1px solid var(--rule-2);padding-top:9px;margin-top:3px}
+
+/* photo strip */
+.strip{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px;margin:18px 0}
+.strip figure{margin:0;position:relative;overflow:hidden}
+.strip img{width:100%;height:132px;object-fit:cover}
+.strip figcaption{position:absolute;inset:auto 0 0 0;padding:16px 9px 6px;color:#fff;font-size:11px;
+  font-family:ui-monospace,Menlo,monospace;letter-spacing:.05em;
+  background:linear-gradient(to top,rgba(6,12,17,.9),transparent)}
+
+table{width:100%;border-collapse:collapse;font-size:14px;margin:14px 0}
+.scroll{overflow-x:auto}
+th{text-align:left;font-family:ui-monospace,Menlo,monospace;font-size:10px;letter-spacing:.13em;
+  text-transform:uppercase;color:var(--muted);font-weight:400;padding:0 12px 8px 0;
+  border-bottom:1px solid var(--rule);vertical-align:bottom}
+td{padding:10px 12px 10px 0;border-bottom:1px solid var(--rule-2);vertical-align:top}
+td.num,th.num{text-align:right;font-family:ui-monospace,Menlo,monospace;font-variant-numeric:tabular-nums;padding-right:0}
+tr.tot td{border-top:2px solid var(--ink);border-bottom:none;font-weight:700;padding-top:11px}
+.sm{font-size:12.5px;color:var(--muted);display:block;margin-top:2px}
+
+.verdict{border:1px solid var(--glacier);padding:17px 20px;margin:20px 0;background:var(--surface-2)}
+.verdict .lab{font-family:ui-monospace,Menlo,monospace;font-size:10px;letter-spacing:.15em;
+  text-transform:uppercase;color:var(--glacier);margin-bottom:6px}
+.verdict p{margin:0;font-size:14.5px}.verdict p+p{margin-top:9px}
+.warnbox{border-left:3px solid var(--warn);background:var(--surface-2);padding:15px 19px;margin:18px 0;font-size:14px;color:var(--ink-2)}
+.warnbox strong{color:var(--ink)}
+ul{padding-left:19px}li{margin-bottom:6px;color:var(--ink-2)}li strong{color:var(--ink)}
+footer{padding:30px 0 66px;font-size:12px;color:var(--muted)}
+@media (max-width:620px){ .day{grid-template-columns:1fr} .day img{height:170px;min-height:0} }
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style></head><body>
+<nav><div><a href="index.html">The OS</a><a href="trips.html">Trips</a><a href="trip-belt.html">Central Belt</a><a href="trip-iceland.html" class="on">Iceland</a><a href="trip-iberia.html">Iberia</a><a href="trip-weekends.html">Weekends</a><a href="budget.html">Costs</a></div></nav>
+<div class="hero">
+  <img class="hero-img" src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2c/J%C3%B6kuls%C3%A1rl%C3%B3n_lagoon_in_southeastern_Iceland.jpg/1280px-J%C3%B6kuls%C3%A1rl%C3%B3n_lagoon_in_southeastern_Iceland.jpg" alt="" loading="eager">
+  <div class="hero-cap"><div class="wrap">
+    <p class="eyebrow">Phase 2 · 25 September – 3 October 2026</p><h1>1,332 kilometres,<br>and no railway at all</h1><p class="hero-sub">The full Ring Road in nine days. What it costs, why you must not do it alone, and why this is where the food you carried from India pays for itself.</p>
+  </div></div>
+</div>
+<main class="wrap">
+
+<section>
+  <p class="sec-no">§ — Phase 2 · 25 September – 3 October</p>
+  <h2>The most expensive country on the itinerary, and the hardest to eat in</h2>
+  <p class="lede">Nine days is the shortest trip where driving the whole Ring Road makes sense — under seven,
+  don't attempt it. Two things decide what this costs: how many people split the car, and how much food you
+  carried from India.</p>
+  <div class="stats"><div><span class="lab">Ring Road</span><div class="v">1,332 km</div><p>The full loop. Nine days makes it comfortable rather than frantic.</p></div><div><span class="lab">Car, split 4 ways</span><div class="v">€25/day</div><p>Against €80–100 alone. Iceland punishes solo travel harder than anywhere.</p></div><div><span class="lab">A restaurant main</span><div class="v">€25–35</div><p>Jain-compatible options outside Reykjavík: close to none.</p></div><div><span class="lab">Your rail pass</span><div class="v">€0</div><p>Iceland has no passenger railway. Nine pass days go unused.</p></div></div>
+  <div class="strip"><figure><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2c/J%C3%B6kuls%C3%A1rl%C3%B3n_lagoon_in_southeastern_Iceland.jpg/1280px-J%C3%B6kuls%C3%A1rl%C3%B3n_lagoon_in_southeastern_Iceland.jpg" alt="Jökulsárlón glacier lagoon" loading="lazy"><figcaption>Jökulsárlón glacier lagoon</figcaption></figure><figure><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/33/Idyllic_landscape_with_a_waterfall_%28Unsplash%29.jpg/1280px-Idyllic_landscape_with_a_waterfall_%28Unsplash%29.jpg" alt="Seljalandsfoss" loading="lazy"><figcaption>Seljalandsfoss</figcaption></figure><figure><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/df/Kirkjufell_in_Iceland.jpg/1280px-Kirkjufell_in_Iceland.jpg" alt="Kirkjufell, Snæfellsnes" loading="lazy"><figcaption>Kirkjufell, Snæfellsnes</figcaption></figure><figure><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/04/Reykjav%C3%ADk%2C_view_from_Hallgr%C3%ADmskirkja_%282%29.jpg/1280px-Reykjav%C3%ADk%2C_view_from_Hallgr%C3%ADmskirkja_%282%29.jpg" alt="Reykjavík" loading="lazy"><figcaption>Reykjavík</figcaption></figure></div>
+  <div class="verdict"><p class="lab">Do this before you book anything else</p>
+  <p><strong>Find three other people.</strong> Car, fuel and a guesthouse room all divide by four. Alone, nine
+  days in Iceland is €1,800+; split four ways it is €950–1,100. The GEM exchange cohort and the Indian student
+  groups are full of people looking at the same window — ask in early September, not October.</p>
+  <p><strong>Then book the car, before the flights.</strong> Icelandic rental stock is small and September is
+  still shoulder-season demand. Beds you can find late; a 4×4 you cannot.</p></div>
+  <div class="warnbox"><strong>This is where the food you carried earns its weight.</strong> A kilo of
+  ready-to-eat carried into Iceland returns roughly <strong>€83</strong> against buying meals — about eight times
+  what the same kilo returns during term in Grenoble, where you have a kitchen and an Indian grocer. Two packs
+  a day for nine days is about 5.4 kg, and it is the single best-justified weight in your luggage. A campervan
+  compounds this: it folds bed and transport into one line <em>and</em> gives you somewhere to cook.</div>
+</section>
+<section>
+  <p class="sec-no">§ — Day by day</p>
+  <h2>Clockwise around the island</h2>
+  <div class="day"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/04/Reykjav%C3%ADk%2C_view_from_Hallgr%C3%ADmskirkja_%282%29.jpg/1280px-Reykjav%C3%ADk%2C_view_from_Hallgr%C3%ADmskirkja_%282%29.jpg" alt="Reykjavík" loading="lazy">
+<div class="day-body"><div class="day-head"><span class="day-date">Fri 25 Sep</span>
+<span class="day-city">Reykjavík</span><span class="day-country">Iceland</span></div>
+<p>Wizz Air from Gdańsk, about 4h15. Collect the hire car at Keflavík — booked months ago, because Icelandic rental stock is small and runs out long before beds do. Hallgrímskirkja and the harbour in the evening.</p><div class="meta"><span class="chip c-no">flight ≈€90</span><span class="chip c-bed">guesthouse</span><span class="chip c-cost">€120</span></div></div></div>
+<div class="day"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/33/Idyllic_landscape_with_a_waterfall_%28Unsplash%29.jpg/1280px-Idyllic_landscape_with_a_waterfall_%28Unsplash%29.jpg" alt="Golden Circle" loading="lazy">
+<div class="day-body"><div class="day-head"><span class="day-date">Sat 26 Sep</span>
+<span class="day-city">Golden Circle</span><span class="day-country">Iceland</span></div>
+<p>Þingvellir, where the Atlantic and Eurasian plates pull apart and the Vikings held their parliament; then Geysir and Gullfoss. The classic first day, and deservedly so.</p><div class="meta"><span class="chip c-cost">car, shared 4 ways</span><span class="chip c-bed">guesthouse</span><span class="chip c-cost">€105</span></div></div></div>
+<div class="day"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/33/Idyllic_landscape_with_a_waterfall_%28Unsplash%29.jpg/1280px-Idyllic_landscape_with_a_waterfall_%28Unsplash%29.jpg" alt="South Coast" loading="lazy">
+<div class="day-body"><div class="day-head"><span class="day-date">Sun 27 Sep</span>
+<span class="day-city">South Coast</span><span class="day-country">Iceland</span></div>
+<p>Seljalandsfoss, which you can walk behind, then Skógafoss and the black sand at Reynisfjara. Respect the sneaker waves there — they kill people most years.</p><div class="meta"><span class="chip c-cost">driving day</span><span class="chip c-bed">guesthouse · Vík</span><span class="chip c-cost">€105</span></div></div></div>
+<div class="day"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2c/J%C3%B6kuls%C3%A1rl%C3%B3n_lagoon_in_southeastern_Iceland.jpg/1280px-J%C3%B6kuls%C3%A1rl%C3%B3n_lagoon_in_southeastern_Iceland.jpg" alt="Jökulsárlón" loading="lazy">
+<div class="day-body"><div class="day-head"><span class="day-date">Mon 28 Sep</span>
+<span class="day-city">Jökulsárlón</span><span class="day-country">Iceland</span></div>
+<p>The glacier lagoon, and Diamond Beach opposite where the icebergs wash back ashore. The single most photographed place in the country, and the one that most justifies the drive east.</p><div class="meta"><span class="chip c-cost">driving day</span><span class="chip c-bed">guesthouse</span><span class="chip c-cost">€110</span></div></div></div>
+<div class="day"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/df/Kirkjufell_in_Iceland.jpg/1280px-Kirkjufell_in_Iceland.jpg" alt="East Fjords" loading="lazy">
+<div class="day-body"><div class="day-head"><span class="day-date">Tue 29 Sep</span>
+<span class="day-city">East Fjords</span><span class="day-country">Iceland</span></div>
+<p>The emptiest stretch of the Ring Road — long, slow, and largely yours. Reindeer, fishing villages, and very little else. Fuel up whenever you see a pump, not when you need one.</p><div class="meta"><span class="chip c-cost">driving day</span><span class="chip c-bed">guesthouse</span><span class="chip c-cost">€105</span></div></div></div>
+<div class="day"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2c/J%C3%B6kuls%C3%A1rl%C3%B3n_lagoon_in_southeastern_Iceland.jpg/1280px-J%C3%B6kuls%C3%A1rl%C3%B3n_lagoon_in_southeastern_Iceland.jpg" alt="Mývatn" loading="lazy">
+<div class="day-body"><div class="day-head"><span class="day-date">Wed 30 Sep</span>
+<span class="day-city">Mývatn</span><span class="day-country">Iceland</span></div>
+<p>Geothermal country — mud pools, Dettifoss (the most powerful waterfall in Europe), and the Mývatn Nature Baths, which are the Blue Lagoon without the price or the crowds.</p><div class="meta"><span class="chip c-cost">driving day</span><span class="chip c-bed">guesthouse</span><span class="chip c-cost">€110</span></div></div></div>
+<div class="day"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/04/Reykjav%C3%ADk%2C_view_from_Hallgr%C3%ADmskirkja_%282%29.jpg/1280px-Reykjav%C3%ADk%2C_view_from_Hallgr%C3%ADmskirkja_%282%29.jpg" alt="Akureyri" loading="lazy">
+<div class="day-body"><div class="day-head"><span class="day-date">Thu 1 Oct</span>
+<span class="day-city">Akureyri</span><span class="day-country">Iceland</span></div>
+<p>Iceland's northern capital. Whale watching from here has among the highest success rates in the country. Aurora season has just opened and you are as far north as the trip goes — check the forecast and stay out of town lights.</p><div class="meta"><span class="chip c-cost">aurora window</span><span class="chip c-bed">guesthouse</span><span class="chip c-cost">€115</span></div></div></div>
+<div class="day"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/df/Kirkjufell_in_Iceland.jpg/1280px-Kirkjufell_in_Iceland.jpg" alt="Snæfellsnes" loading="lazy">
+<div class="day-body"><div class="day-head"><span class="day-date">Fri 2 Oct</span>
+<span class="day-city">Snæfellsnes</span><span class="day-country">Iceland</span></div>
+<p>The peninsula that gets called Iceland in miniature, and Kirkjufell — the arrowhead mountain from every photograph of this country ever taken. A long drive back west, worth it.</p><div class="meta"><span class="chip c-cost">driving day</span><span class="chip c-bed">guesthouse</span><span class="chip c-cost">€110</span></div></div></div>
+<div class="day"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/04/Reykjav%C3%ADk%2C_view_from_Hallgr%C3%ADmskirkja_%282%29.jpg/1280px-Reykjav%C3%ADk%2C_view_from_Hallgr%C3%ADmskirkja_%282%29.jpg" alt="Reykjavík → Paris" loading="lazy">
+<div class="day-body"><div class="day-head"><span class="day-date">Sat 3 Oct</span>
+<span class="day-city">Reykjavík → Paris</span><span class="day-country">Iceland · France</span></div>
+<p>Return the car, fly Keflavík to CDG. Collect the case you left in Paris three weeks ago, then TGV south. You reach Grenoble having already seen nine countries — before a single class.</p><div class="meta"><span class="chip c-no">flight ≈€110</span><span class="chip c-bed">→ Grenoble</span><span class="chip c-cost">€140</span></div></div></div>
+</section>
+<section>
+  <p class="sec-no">§ — Money</p>
+  <h2>What it actually costs, four sharing</h2>
+  <div class="scroll"><table>
+  <tr><th>Line</th><th>Detail</th><th class="num">€</th></tr>
+  <tr><td>Car + fuel</td><td>9 days, split four ways. Fuel is the hidden cost — the Ring Road is long</td><td class="num">320</td></tr>
+  <tr><td>Beds</td><td>8 nights guesthouse, shared rooms</td><td class="num">360</td></tr>
+  <tr><td>Food</td><td>Cooking most meals, supplemented by what you carried</td><td class="num">180</td></tr>
+  <tr><td>Entries</td><td>Mývatn Nature Baths, whale watching, parking fees at the big sites</td><td class="num">140</td></tr>
+  <tr><td>Flights</td><td>Gdańsk→Keflavík ≈€90, Keflavík→Paris ≈€110 — neither on the pass</td><td class="num">200</td></tr>
+  <tr class="tot"><td colspan="2">Nine days, four sharing</td><td class="num">≈ 1,200</td></tr>
+  </table></div>
+  <p class="lede" style="margin-top:14px">Alone, the same nine days runs past €2,000. The difference is almost
+  entirely the car and the room — which is why finding three others is worth more than every other saving on
+  this page combined.</p>
+</section>
+<footer>Photographs from Wikimedia Commons under their respective licences. Costs are per person, hostel dorms or shared rooms, booked three or more weeks ahead — planning estimates, not quotes. Rail costs are reservation fees only; the Eurail Global Pass (3-month continuous) covers the seat itself.</footer>
+</main></body></html>
