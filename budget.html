@@ -1,0 +1,257 @@
+<title>What the semester costs — Grenoble Fall 2026</title>
+<style>
+  :root{
+    --ground:#E8ECEE; --surface:#FBFCFC; --surface-2:#F1F4F5;
+    --ink:#141E27; --ink-2:#41525F; --muted:#75868F;
+    --rule:#CDD6DA; --rule-2:#DFE6E9;
+    --accent:#C13F24; --glacier:#26707E; --ice:#3A6E9E; --moss:#4A6B3A; --warn:#8A5A0C;
+  }
+  @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+    --ground:#0E161C; --surface:#151F27; --surface-2:#1B2831;
+    --ink:#E3EAEE; --ink-2:#A8B8C1; --muted:#7B8C96;
+    --rule:#2A3A45; --rule-2:#223039;
+    --accent:#F06742; --glacier:#54AEBE; --ice:#6FA8D6; --moss:#8FB07A; --warn:#D8A93C;
+  }}
+  :root[data-theme="dark"]{
+    --ground:#0E161C; --surface:#151F27; --surface-2:#1B2831;
+    --ink:#E3EAEE; --ink-2:#A8B8C1; --muted:#7B8C96;
+    --rule:#2A3A45; --rule-2:#223039;
+    --accent:#F06742; --glacier:#54AEBE; --ice:#6FA8D6; --moss:#8FB07A; --warn:#D8A93C;
+  }
+  *{box-sizing:border-box}
+  body{background:var(--ground);color:var(--ink);margin:0;font-size:15px;line-height:1.55;
+    font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;-webkit-font-smoothing:antialiased}
+  .mono{font-family:ui-monospace,"SF Mono",SFMono-Regular,Menlo,Consolas,monospace;font-variant-numeric:tabular-nums}
+  .wrap{max-width:1000px;margin:0 auto;padding:0 20px 80px}
+  a{color:var(--accent)}
+
+  header{padding:48px 0 26px;border-bottom:2px solid var(--ink)}
+  .eyebrow{font-family:ui-monospace,Menlo,monospace;font-size:11px;letter-spacing:.18em;
+    text-transform:uppercase;color:var(--accent);margin:0 0 13px}
+  h1{font-size:clamp(29px,4.6vw,45px);line-height:1.03;letter-spacing:-.028em;font-weight:700;margin:0;text-wrap:balance}
+  .sub{color:var(--ink-2);margin:13px 0 0;max-width:63ch}
+
+  .ledger{position:sticky;top:0;z-index:20;background:var(--surface);border-bottom:1px solid var(--rule);padding:15px 20px}
+  .ledger-in{max-width:1000px;margin:0 auto;display:flex;flex-wrap:wrap;gap:22px;align-items:flex-end}
+  .fig{display:flex;flex-direction:column;gap:1px}
+  .fig .lab{font-family:ui-monospace,Menlo,monospace;font-size:10px;letter-spacing:.13em;text-transform:uppercase;color:var(--muted)}
+  .fig .val{font-family:ui-monospace,Menlo,monospace;font-variant-numeric:tabular-nums;font-size:18px;font-weight:600}
+  .fig.total .val{font-size:30px;color:var(--accent)}
+  .fig .inr{font-family:ui-monospace,Menlo,monospace;font-size:11px;color:var(--muted)}
+
+  h2{font-size:12px;font-family:ui-monospace,Menlo,monospace;letter-spacing:.16em;text-transform:uppercase;
+    color:var(--muted);margin:42px 0 0;padding-bottom:9px;border-bottom:1px solid var(--rule)}
+  h2 em{font-style:normal;color:var(--accent);text-transform:none;letter-spacing:0;font-size:12px}
+
+  .row{display:grid;grid-template-columns:52px 118px 1fr 96px;gap:13px;align-items:center;
+    padding:12px 0;border-bottom:1px solid var(--rule-2)}
+  .code{font-family:ui-monospace,Menlo,monospace;font-size:13px;font-weight:600;color:var(--accent)}
+  .dates{font-family:ui-monospace,Menlo,monospace;font-size:12px;color:var(--ink-2)}
+  select{width:100%;font-family:inherit;font-size:14px;padding:8px 10px;background:var(--surface);
+    color:var(--ink);border:1px solid var(--rule);cursor:pointer}
+  select:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
+  .cost{font-family:ui-monospace,Menlo,monospace;font-variant-numeric:tabular-nums;text-align:right;font-size:14px;font-weight:600}
+  .cost.zero{color:var(--muted);font-weight:400}
+  .note{grid-column:3/5;font-size:12px;color:var(--muted);margin-top:-3px}
+  .note.star{color:var(--glacier);font-weight:500}
+
+  .phase{display:grid;grid-template-columns:1fr 96px;gap:13px;align-items:center;padding:14px 0;border-bottom:1px solid var(--rule-2)}
+  .phase .t{font-weight:600} .phase .t span{display:block;font-weight:400;font-size:12.5px;color:var(--muted);margin-top:2px}
+  .phase select{margin-top:7px}
+
+  .fixed{display:grid;grid-template-columns:1fr 96px;gap:13px;align-items:baseline;padding:10px 0;border-bottom:1px solid var(--rule-2)}
+  .fixed label{display:flex;gap:10px;align-items:flex-start;cursor:pointer}
+  .fixed input{margin-top:5px;accent-color:var(--glacier);flex:none}
+  .fixed .why{display:block;font-size:12px;color:var(--muted);margin-top:1px}
+  .fixed.lock label{opacity:.75;cursor:default}
+
+  .split{display:flex;flex-wrap:wrap;border:1px solid var(--rule);margin-top:26px}
+  .split div{flex:1 1 140px;padding:14px 16px;border-right:1px solid var(--rule-2)}
+  .split div:last-child{border-right:none}
+  .split .lab{font-family:ui-monospace,Menlo,monospace;font-size:10px;letter-spacing:.13em;text-transform:uppercase;color:var(--muted)}
+  .split .v{font-family:ui-monospace,Menlo,monospace;font-size:18px;font-weight:600;margin-top:3px}
+
+  .callout{background:var(--surface-2);border-left:3px solid var(--glacier);padding:14px 18px;margin-top:30px;font-size:14px;color:var(--ink-2)}
+  .callout strong{color:var(--ink)}
+  footer{margin-top:40px;padding-top:16px;border-top:1px solid var(--rule);font-size:12px;color:var(--muted)}
+  @media (max-width:620px){
+    .row{grid-template-columns:46px 1fr 88px;row-gap:7px}
+    .dates{grid-column:2/4;margin-top:-5px} .row select{grid-column:1/3} .note{grid-column:1/4}
+  }
+  @media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+
+<header class="wrap">
+  <p class="eyebrow">Companion to the <a href="https://rochakjain361.github.io/grenoble-exchange-os/">Grenoble Exchange OS</a></p>
+  <h1>What the semester<br>actually costs</h1>
+  <p class="sub">103 days across six phases, priced per person. Change any dropdown and the total moves.
+  Built on the real calendar: 23 days of travel before term, 74 nights in Grenoble, and eleven weekend windows.</p>
+</header>
+
+<div class="ledger">
+  <div class="ledger-in">
+    <div class="fig total"><span class="lab">Everything</span><span class="val mono" id="tAll">€0</span><span class="inr" id="tInr">≈ ₹0</span></div>
+    <div class="fig"><span class="lab">Pre-term travel</span><span class="val mono" id="tPre">€0</span></div>
+    <div class="fig"><span class="lab">Weekends</span><span class="val mono" id="tWk">€0</span></div>
+    <div class="fig"><span class="lab">Living &amp; structural</span><span class="val mono" id="tFix">€0</span></div>
+  </div>
+</div>
+
+<main class="wrap">
+
+<h2>Phase 1 &amp; 2 — before term <em>11 Sep – 4 Oct · 23 days</em></h2>
+<div id="phases"></div>
+
+<h2>Phase 3 — the eleven windows <em>5 Oct – 18 Dec</em></h2>
+<div id="rows"></div>
+
+<h2>Living &amp; structural — not optional, not per-trip</h2>
+<div id="fixed"></div>
+
+<div class="split">
+  <div><span class="lab">Nights away</span><div class="v mono" id="sNights">0</div></div>
+  <div><span class="lab">Rail reservations</span><div class="v mono" id="sRail">€0</div></div>
+  <div><span class="lab">Windows used</span><div class="v mono" id="sUsed">0 / 11</div></div>
+  <div><span class="lab">Countries touched</span><div class="v mono" id="sCtry">0</div></div>
+</div>
+
+<div class="callout">
+  <strong>The three lines that decide this budget</strong> are housing, Iceland and Iberia — together they're
+  usually more than half the total. Everything else is noise by comparison. If the number is too high, cut
+  those three before you cut weekends: a shared flat instead of a studio, and three people to split an Icelandic
+  car, together save more than skipping five trips.
+</div>
+
+<footer>
+  Per person, hostel dorms or shared rooms, booked three or more weeks ahead. Rail costs are
+  <strong>reservation fees only</strong> — the Eurail Global Pass (3-month continuous) covers the seat, but not
+  the compulsory reservation on French, Italian and Spanish high-speed. Conversion at €1 ≈ ₹101. Planning
+  estimates, not quotes.
+</footer>
+</main>
+
+<script>
+const RATE=101;
+/* cost = rail + nights*(bed+ground);  day trip = rail + ground */
+const D={
+  none:{n:"— nothing planned —",r:0,nt:0,b:0,g:0,c:0},
+  local:{n:"Grenoble · Bastille, Vercors, Chartreuse",r:0,nt:0,b:0,g:18,c:0},
+  chambery:{n:"Chambéry · day trip · free on the pass",r:0,nt:0,b:0,g:25,c:0},
+  lyonday:{n:"Lyon · day trip · free on the pass",r:0,nt:0,b:0,g:30,c:0},
+  annecyday:{n:"Annecy · day trip · free on the pass",r:0,nt:0,b:0,g:30,c:0},
+  annecy:{n:"Annecy · 2 nights",r:0,nt:2,b:32,g:35,c:0},
+  lyon:{n:"Lyon · 2 nights",r:0,nt:2,b:30,g:38,c:0},
+  lumieres:{n:"Lyon · Fête des Lumières · 2 nights",r:0,nt:2,b:45,g:40,c:0},
+  geneva:{n:"Geneva · 2 nights · Switzerland",r:0,nt:2,b:45,g:55,c:1},
+  chamonix:{n:"Chamonix / Mont-Blanc · 2 nights",r:0,nt:2,b:35,g:40,c:0},
+  ski:{n:"Ski weekend · Alpe d'Huez or Les 2 Alpes",r:30,nt:2,b:40,g:45,c:0},
+  turin:{n:"Turin · 2 nights · Italy",r:10,nt:2,b:28,g:35,c:1},
+  zurich:{n:"Zurich / Bern / Interlaken · 3 nights",r:0,nt:3,b:50,g:60,c:1},
+  strasbourg:{n:"Strasbourg + Colmar · Christmas markets · 3 nights",r:15,nt:3,b:30,g:36,c:0},
+  milan:{n:"Milan · 3 nights · Italy",r:13,nt:3,b:30,g:38,c:1},
+  marseille:{n:"Marseille · 3 nights",r:15,nt:3,b:30,g:38,c:0},
+  nice:{n:"Nice + Monaco · 3 nights",r:20,nt:3,b:32,g:40,c:1},
+  florence:{n:"Florence · 3 nights · Italy",r:25,nt:3,b:30,g:38,c:1},
+  venice:{n:"Venice · 3 nights · Italy",r:25,nt:3,b:32,g:40,c:1},
+  paris:{n:"Paris · 3 nights",r:20,nt:3,b:38,g:45,c:0},
+  barcelona:{n:"Barcelona · 3 nights · Spain",r:30,nt:3,b:28,g:38,c:1},
+  munich:{n:"Munich · 3 nights · Germany (7h, long)",r:0,nt:3,b:30,g:38,c:1},
+  iberia:{n:"★ IBERIA BLOCK · Barcelona→Madrid→Lisbon→Porto · 9 days",r:53,nt:8,b:28,g:32,c:2,flat:750},
+};
+const cost=k=>{const d=D[k];if(d.flat)return d.flat;return d.nt?d.r+d.nt*(d.b+d.g):d.r+d.g;};
+
+const W=[
+  {c:"G01",d:"9–12 Oct",def:"lyonday",note:"Just moved in. Stay close — a free TER day trip costs you nothing."},
+  {c:"G02",d:"16–19 Oct",def:"turin",note:"⚠ Eco-Design intensive runs 14–28 Oct. Weekends only — do not miss weekdays this fortnight."},
+  {c:"G03",d:"23–26 Oct",def:"annecy",note:"⚠ Eco-Design still running."},
+  {c:"G04",d:"30 Oct–2 Nov",def:"milan",note:"Toussaint weekend — all of France travels. Book four weeks out."},
+  {c:"G05",d:"7–15 Nov",def:"iberia",star:"★ The nine-day Iberia block. Armistice falls Wed 11 Nov — the cheapest week in the term to miss class."},
+  {c:"G06",d:"20–23 Nov",def:"zurich",note:"Swiss trains need no reservation — free to reach, expensive to stand in."},
+  {c:"G07",d:"27–30 Nov",def:"strasbourg",note:"Alsace Christmas markets open this weekend."},
+  {c:"G08",d:"4–7 Dec",def:"lumieres",star:"★ Fête des Lumières, 5–8 Dec. Free festival, free train, 1h15 away."},
+  {c:"G09",d:"11–14 Dec",def:"ski",note:"Pass has expired (~10 Dec). Ski by bus instead — season opener."},
+  {c:"G10",d:"15–17 Dec",def:"local",note:"Final week of term. Exams and hand-ins."},
+  {c:"G11",d:"18–21 Dec",def:"none",note:"Term ends 18 Dec. Pack, then Paris on the 21st — costed below."},
+];
+
+const PH=[
+  {id:"belt",t:"Phase 1 · Central belt",s:"11–24 Sep · France, Germany, Austria, Slovakia, Hungary, Czechia, Poland — 7 countries, almost all reservation-free on the pass.",
+   o:[["lean","Lean · dorms, cook, walk everything",700],["planned","As routed · dorms + museums + baths",875],["comfy","Comfortable · private rooms, more eating out",1150]],def:"planned"},
+  {id:"ice",t:"Phase 2 · Iceland",s:"25 Sep – 3 Oct · 9 days. The Ring Road is 1,332 km. Cost per person depends almost entirely on how many of you split the car.",
+   o:[["solo","Alone · €1,850",1850],["two","Split 2 ways · €1,400",1400],["three","Split 3 ways · €1,150",1150],["four","Split 4 ways · €1,000",1000],["van","Campervan, 4 sharing · €950",950]],def:"four"},
+  {id:"fly",t:"The two flights either side of Iceland",s:"Gdańsk→Keflavík on Wizz (~4h15), then Keflavík→Paris to collect your stored bag. Neither is on the pass.",
+   o:[["book","Booked early · €200",200],["late","Booked late · €330",330]],def:"book"},
+];
+
+const F=[
+  {id:"rent",n:"Grenoble housing · 74 nights",why:"5 Oct – 18 Dec. The single largest line in the whole semester — and still unbooked.",
+   sel:[["share","Room in a shared flat · €1,000",1000],["studio","Studio · €1,400",1400],["prem","Central studio · €1,700",1700]],def:"share"},
+  {id:"store",n:"Luggage storage in Paris · 23 days",v:150,on:true,why:"You cannot carry 35 kg through six countries and Iceland. Collect it when KEF→CDG lands."},
+  {id:"setup",n:"Bedding, kitchen, household setup",v:100,on:true,why:"IKEA or Action, on arrival. Never fly these."},
+  {id:"winter",n:"Winter kit from Decathlon Grenoble",v:180,on:true,why:"Jacket, down layer, gloves, boots. Better and cheaper here than carrying from India."},
+  {id:"res",n:"Rail reservation budget · whole semester",v:250,on:true,why:"The true cost of a “free” pass. Compulsory on French, Italian and Spanish high-speed."},
+  {id:"tag",n:"Grenoble transport pass · 2.5 months",v:60,on:true,why:"TAG student rate, tram and bus."},
+  {id:"sim",n:"Connectivity · eSIM then a French line",v:75,on:true,why:"Regional eSIM for the travel phase, French SIM once you have an address."},
+  {id:"exit",n:"Grenoble→Paris on 21 Dec + a night near CDG",v:140,on:true,why:"Off-pass by then. A 14:25 flight on a December morning isn't worth a dawn train through the Alps."},
+  {id:"food",n:"Groceries &amp; eating in · 74 days",v:650,on:true,why:"Cooking Jain at home, roughly €9/day. Restaurant meals are counted inside each trip."},
+  {id:"ski",n:"Ski gear rental across the season",v:120,on:false,why:"You live 45 minutes from Alpe d'Huez and arrive as the season opens."},
+  {id:"buf",n:"Contingency",v:300,on:true,why:"A missed train, a sick week, one bad booking. Budgeting zero here is how people come home broke."},
+];
+
+const opts=Object.keys(D).sort((a,b)=>a==="none"?-1:b==="none"?1:cost(a)-cost(b))
+  .map(k=>`<option value="${k}">${D[k].n}${k==="none"?"":" — €"+cost(k)}</option>`).join("");
+
+document.getElementById("phases").innerHTML=PH.map(p=>
+  `<div class="phase"><div class="t">${p.t}<span>${p.s}</span>
+   <select data-ph="${p.id}">${p.o.map(o=>`<option value="${o[2]}"${o[0]===p.def?" selected":""}>${o[1]}</option>`).join("")}</select></div>
+   <span class="cost mono" id="p-${p.id}">€0</span></div>`).join("");
+
+document.getElementById("rows").innerHTML=W.map((w,i)=>
+  `<div class="row"><span class="code">${w.c}</span><span class="dates">${w.d}</span>
+   <span><select data-i="${i}">${opts}</select></span>
+   <span class="cost" id="c${i}">€0</span>
+   <span class="note${w.star?" star":""}">${w.star||w.note||""}</span></div>`).join("");
+document.querySelectorAll("select[data-i]").forEach(s=>{s.value=W[s.dataset.i].def;});
+
+document.getElementById("fixed").innerHTML=F.map(f=>f.sel
+  ? `<div class="fixed lock"><label><span>${f.n}<span class="why">${f.why}</span>
+     <select data-fx="${f.id}" style="margin-top:7px;max-width:320px">${f.sel.map(o=>`<option value="${o[2]}"${o[0]===f.def?" selected":""}>${o[1]}</option>`).join("")}</select></span></label>
+     <span class="cost mono" id="f-${f.id}">€0</span></div>`
+  : `<div class="fixed"><label><input type="checkbox" data-f="${f.id}"${f.on?" checked":""}>
+     <span>${f.n}<span class="why">${f.why}</span></span></label>
+     <span class="cost mono">€${f.v}</span></div>`).join("");
+
+function recalc(){
+  let pre=0;
+  PH.forEach(p=>{const v=+document.querySelector(`[data-ph="${p.id}"]`).value;pre+=v;
+    document.getElementById("p-"+p.id).textContent="€"+v.toLocaleString();});
+
+  let wk=0,nights=0,rail=0,used=0,ctry=0;
+  document.querySelectorAll("select[data-i]").forEach(s=>{
+    const k=s.value,d=D[k],c=cost(k);
+    wk+=c;nights+=d.nt;rail+=d.r;ctry+=d.c;if(k!=="none")used++;
+    const e=document.getElementById("c"+s.dataset.i);
+    e.textContent="€"+c;e.className="cost"+(c?"":" zero");
+  });
+
+  let fix=0;
+  F.forEach(f=>{
+    if(f.sel){const v=+document.querySelector(`[data-fx="${f.id}"]`).value;fix+=v;
+      document.getElementById("f-"+f.id).textContent="€"+v.toLocaleString();}
+    else{const cb=document.querySelector(`[data-f="${f.id}"]`);if(cb&&cb.checked)fix+=f.v;}
+  });
+
+  const all=pre+wk+fix;
+  document.getElementById("tPre").textContent="€"+pre.toLocaleString();
+  document.getElementById("tWk").textContent="€"+wk.toLocaleString();
+  document.getElementById("tFix").textContent="€"+fix.toLocaleString();
+  document.getElementById("tAll").textContent="€"+all.toLocaleString();
+  document.getElementById("tInr").textContent="≈ ₹"+Math.round(all*RATE).toLocaleString("en-IN");
+  document.getElementById("sNights").textContent=nights;
+  document.getElementById("sRail").textContent="€"+(rail+250).toLocaleString();
+  document.getElementById("sUsed").textContent=used+" / 11";
+  document.getElementById("sCtry").textContent=7+ctry;
+}
+document.addEventListener("change",recalc);
+recalc();
+</script>
