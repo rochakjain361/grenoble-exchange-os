@@ -34,11 +34,22 @@ dst.write_text(html)
 print(f"scrubbed ok · {len(html):,} bytes")
 PY
 
+# Second page: the cost model (contains no credentials by construction, but gated anyway).
+python3 - "/Users/rochakjain/Desktop/Semex/02-TRAVEL/budget-model.html" "$REPO/budget.html" <<'PY2'
+import sys, pathlib
+html = pathlib.Path(sys.argv[1]).read_text()
+FORBIDDEN = ["DFXCSF", "5405.864.643", "5563", "IN26-05231", "Henri Dunant", "12-9910"]
+leaks = [f for f in FORBIDDEN if f.lower() in html.lower()]
+if leaks: sys.exit(f"ABORT — credentials in budget page: {leaks}")
+pathlib.Path(sys.argv[2]).write_text(html)
+print(f"budget page ok · {len(html):,} bytes")
+PY2
+
 cd "$REPO"
-if git diff --quiet -- index.html; then
+if git diff --quiet -- index.html budget.html && [ -z "$(git status --porcelain budget.html)" ]; then
   echo "no changes to publish"; exit 0
 fi
-git add index.html
+git add index.html budget.html
 git commit -q -m "${1:-Update planning page}
 
 Co-Authored-By: Claude Opus 5 <noreply@anthropic.com>"
