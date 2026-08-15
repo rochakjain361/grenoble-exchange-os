@@ -1,0 +1,168 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>What&#x27;s left — Grenoble Exchange OS</title>
+<style>
+:root{
+  --ground:#E8ECEE;--surface:#FBFCFC;--surface-2:#F1F4F5;
+  --ink:#141E27;--ink-2:#41525F;--muted:#75868F;
+  --rule:#CDD6DA;--rule-2:#DFE6E9;
+  --accent:#C13F24;--glacier:#26707E;--ice:#3A6E9E;--moss:#4A6B3A;--warn:#8A5A0C;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --ground:#0E161C;--surface:#151F27;--surface-2:#1B2831;
+  --ink:#E3EAEE;--ink-2:#A8B8C1;--muted:#7B8C96;
+  --rule:#2A3A45;--rule-2:#223039;
+  --accent:#F06742;--glacier:#54AEBE;--ice:#6FA8D6;--moss:#8FB07A;--warn:#D8A93C;
+}}
+:root[data-theme="dark"]{
+  --ground:#0E161C;--surface:#151F27;--surface-2:#1B2831;
+  --ink:#E3EAEE;--ink-2:#A8B8C1;--muted:#7B8C96;
+  --rule:#2A3A45;--rule-2:#223039;
+  --accent:#F06742;--glacier:#54AEBE;--ice:#6FA8D6;--moss:#8FB07A;--warn:#D8A93C;
+}
+*{box-sizing:border-box}
+body{background:var(--ground);color:var(--ink);margin:0;font-size:15px;line-height:1.6;
+  font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;-webkit-font-smoothing:antialiased}
+img{max-width:100%;display:block}
+.mono{font-family:ui-monospace,"SF Mono",SFMono-Regular,Menlo,Consolas,monospace;font-variant-numeric:tabular-nums}
+.wrap{max-width:1060px;margin:0 auto;padding:0 20px}
+a{color:var(--accent)}
+nav{position:sticky;top:0;z-index:30;background:var(--surface);border-bottom:1px solid var(--rule);overflow-x:auto}
+nav div{max-width:1060px;margin:0 auto;padding:11px 20px;display:flex;gap:20px;white-space:nowrap}
+nav a{font-family:ui-monospace,Menlo,monospace;font-size:11px;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--ink-2);text-decoration:none;padding-bottom:2px;border-bottom:2px solid transparent}
+nav a:hover,nav a:focus-visible{color:var(--accent);border-bottom-color:var(--accent);outline:none}
+nav a.on{color:var(--accent);border-bottom-color:var(--accent)}
+
+.hero{position:relative;margin-top:0;border-bottom:2px solid var(--ink)}
+.hero-img{width:100%;height:clamp(210px,34vw,380px);object-fit:cover;filter:saturate(.92)}
+.hero-cap{position:absolute;inset:auto 0 0 0;padding:26px 0 20px;
+  background:linear-gradient(to top,rgba(6,12,17,.92),rgba(6,12,17,.55) 55%,transparent)}
+.hero-cap .wrap{color:#fff}
+.eyebrow{font-family:ui-monospace,Menlo,monospace;font-size:11px;letter-spacing:.18em;
+  text-transform:uppercase;color:#F2A38C;margin:0 0 9px}
+h1{font-size:clamp(28px,4.6vw,46px);line-height:1.03;letter-spacing:-.028em;font-weight:700;margin:0;
+  text-wrap:balance;color:#fff}
+.hero-sub{color:#D6E0E6;margin:10px 0 0;max-width:60ch;font-size:15px}
+
+h2{font-size:clamp(20px,2.7vw,27px);letter-spacing:-.02em;margin:0 0 4px;font-weight:700;text-wrap:balance}
+section{padding:46px 0;border-bottom:1px solid var(--rule)}
+.sec-no{font-family:ui-monospace,Menlo,monospace;font-size:11px;letter-spacing:.16em;
+  text-transform:uppercase;color:var(--muted);margin:0 0 10px}
+.lede{color:var(--ink-2);max-width:66ch;margin:10px 0 24px}
+
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));border:1px solid var(--rule);margin:18px 0 6px}
+.stats>div{padding:15px 17px;border-right:1px solid var(--rule-2)}
+.stats>div:last-child{border-right:none}
+.stats .lab{font-family:ui-monospace,Menlo,monospace;font-size:10px;letter-spacing:.13em;
+  text-transform:uppercase;color:var(--muted)}
+.stats .v{font-family:ui-monospace,Menlo,monospace;font-size:22px;font-weight:600;letter-spacing:-.02em;margin-top:3px}
+.stats p{margin:4px 0 0;font-size:12.5px;color:var(--ink-2)}
+
+/* day cards */
+.day{display:grid;grid-template-columns:190px 1fr;gap:0;border:1px solid var(--rule);margin-bottom:14px;
+  background:var(--surface);overflow:hidden}
+.day img{width:100%;height:100%;min-height:150px;object-fit:cover}
+.day-body{padding:15px 18px}
+.day-head{display:flex;flex-wrap:wrap;gap:10px;align-items:baseline;margin-bottom:5px}
+.day-date{font-family:ui-monospace,Menlo,monospace;font-size:12px;color:var(--accent);font-weight:600}
+.day-city{font-size:17px;font-weight:700;letter-spacing:-.015em}
+.day-country{font-family:ui-monospace,Menlo,monospace;font-size:10px;letter-spacing:.1em;
+  text-transform:uppercase;color:var(--muted)}
+.day-body p{margin:0 0 9px;font-size:14px;color:var(--ink-2)}
+.meta{display:flex;flex-wrap:wrap;gap:7px}
+.chip{display:inline-block;font-family:ui-monospace,Menlo,monospace;font-size:10px;letter-spacing:.07em;
+  text-transform:uppercase;padding:2px 7px;border:1px solid currentColor;white-space:nowrap}
+.c-free{color:var(--moss)}.c-res{color:var(--warn)}.c-no{color:var(--accent)}
+.c-bed{color:var(--glacier)}.c-cost{color:var(--ink-2)}
+
+/* trip cards on the hub */
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px;margin-top:22px}
+.card{border:1px solid var(--rule);background:var(--surface);text-decoration:none;color:inherit;
+  display:flex;flex-direction:column;transition:border-color .16s}
+.card:hover,.card:focus-visible{border-color:var(--accent);outline:none}
+.card img{width:100%;height:172px;object-fit:cover}
+.card-b{padding:16px 18px;display:flex;flex-direction:column;gap:7px;flex:1}
+.card h3{margin:0;font-size:19px;letter-spacing:-.02em}
+.card .when{font-family:ui-monospace,Menlo,monospace;font-size:11px;color:var(--accent);letter-spacing:.04em}
+.card p{margin:0;font-size:13.5px;color:var(--ink-2);flex:1}
+.card .foot{display:flex;justify-content:space-between;font-family:ui-monospace,Menlo,monospace;
+  font-size:11px;color:var(--muted);border-top:1px solid var(--rule-2);padding-top:9px;margin-top:3px}
+
+/* photo strip */
+.strip{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px;margin:18px 0}
+.strip figure{margin:0;position:relative;overflow:hidden}
+.strip img{width:100%;height:132px;object-fit:cover}
+.strip figcaption{position:absolute;inset:auto 0 0 0;padding:16px 9px 6px;color:#fff;font-size:11px;
+  font-family:ui-monospace,Menlo,monospace;letter-spacing:.05em;
+  background:linear-gradient(to top,rgba(6,12,17,.9),transparent)}
+
+table{width:100%;border-collapse:collapse;font-size:14px;margin:14px 0}
+.scroll{overflow-x:auto}
+th{text-align:left;font-family:ui-monospace,Menlo,monospace;font-size:10px;letter-spacing:.13em;
+  text-transform:uppercase;color:var(--muted);font-weight:400;padding:0 12px 8px 0;
+  border-bottom:1px solid var(--rule);vertical-align:bottom}
+td{padding:10px 12px 10px 0;border-bottom:1px solid var(--rule-2);vertical-align:top}
+td.num,th.num{text-align:right;font-family:ui-monospace,Menlo,monospace;font-variant-numeric:tabular-nums;padding-right:0}
+tr.tot td{border-top:2px solid var(--ink);border-bottom:none;font-weight:700;padding-top:11px}
+.sm{font-size:12.5px;color:var(--muted);display:block;margin-top:2px}
+
+.verdict{border:1px solid var(--glacier);padding:17px 20px;margin:20px 0;background:var(--surface-2)}
+.verdict .lab{font-family:ui-monospace,Menlo,monospace;font-size:10px;letter-spacing:.15em;
+  text-transform:uppercase;color:var(--glacier);margin-bottom:6px}
+.verdict p{margin:0;font-size:14.5px}.verdict p+p{margin-top:9px}
+.warnbox{border-left:3px solid var(--warn);background:var(--surface-2);padding:15px 19px;margin:18px 0;font-size:14px;color:var(--ink-2)}
+.warnbox strong{color:var(--ink)}
+ul{padding-left:19px}li{margin-bottom:6px;color:var(--ink-2)}li strong{color:var(--ink)}
+.chartwrap{overflow-x:auto;border:1px solid var(--rule);background:var(--surface);padding:16px 12px;margin:20px 0}
+.chartwrap svg{min-width:640px;width:100%;height:auto;display:block}
+footer{padding:30px 0 66px;font-size:12px;color:var(--muted)}
+@media (max-width:620px){ .day{grid-template-columns:1fr} .day img{height:170px;min-height:0} }
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style></head><body>
+<nav><div><a href="index.html">The OS</a><a href="trips.html">Trips</a><a href="trip-belt.html">Central Belt</a><a href="trip-iceland.html">Iceland</a><a href="trip-iberia.html">Iberia</a><a href="trip-balkans.html">Balkans</a><a href="trip-weekends.html">Weekends</a><a href="packing.html">Packing</a><a href="gear.html">Gear</a><a href="housing.html">Housing</a><a href="pass.html">The Pass</a><a href="checklist.html" class="on">What&#x27;s left</a><a href="budget.html">Costs</a></div></nav>
+<div class="hero">
+  <img class="hero-img" src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/23/Panorama_grenoble.png/1280px-Panorama_grenoble.png" alt="" loading="eager">
+  <div class="hero-cap"><div class="wrap">
+    <p class="eyebrow">26 days to departure · updated 13 August 2026</p><h1>Everything still open</h1><p class="hero-sub">The blockers, the admin, the three unknowns — and the driving permit that would have ended the Iceland trip at the counter.</p>
+  </div></div>
+</div>
+<main class="wrap">
+
+<section>
+  <p class="sec-no">§ — Before you fly · 26 days</p>
+  <h2>One of these will stop you at a rental desk in Reykjavík</h2>
+  <p class="lede">You asked what we're skipping. This is the honest list, and the top item is one I hadn't
+  checked until you asked — it would have surfaced on 25 September, in Iceland, at the counter, with a car
+  booked and no way to drive it.</p>
+  <div class="stats"><div><span class="lab">Days until you fly</span><div class="v">26</div><p>10 September, 21:00 from Bengaluru.</p></div><div><span class="lab">Hard money deadline</span><div class="v">7 Sep</div><p>The apartment. €5,285.</p></div><div><span class="lab">Still unbooked</span><div class="v">74 nights</div><p>Grenoble housing.</p></div><div><span class="lab">New blocker found</span><div class="v">IDP</div><p>Iceland will not rent to you without one.</p></div></div>
+  <div class="scroll"><table><tr><th></th><th>Before 10 September</th><th>When</th></tr><tr><td><span class="chip c-no">blocker</span></td><td><strong>Get an International Driving Permit</strong><span class="sm"><strong>You cannot rent the Iceland car without one.</strong> Indian licences carry non-Roman script, so Iceland requires an IDP alongside the original licence — this is a rule, not a recommendation. Apply at your RTO or WIAA with licence, passport, visa and photos. It takes days to weeks, so it is the most time-critical thing on this page after the apartment.</span></td><td class="d">NOW</td></tr><tr><td><span class="chip c-no">blocker</span></td><td><strong>Cancel the visa apartment</strong><span class="sm">€5,285.04 becomes payable at midnight. Free until then. Tell Shantanu and Aryan — the liability is joint.</span></td><td class="d">by 7 Sep 23:59</td></tr><tr><td><span class="chip c-no">blocker</span></td><td><strong>Book Grenoble housing</strong><span class="sm">74 nights, still open. Visale first, then phone Les Estudines Europole. Ask for a « bail mobilité ».</span></td><td class="d">this week</td></tr><tr><td><span class="chip c-res">high</span></td><td><strong>Apply for Visale</strong><span class="sm">Free state guarantor, 2–15 days to issue, and you cannot sign a lease without holding it. Costs nothing to start.</span></td><td class="d">today</td></tr><tr><td><span class="chip c-res">high</span></td><td><strong>Open Revolut, N26 or Wise</strong><span class="sm"><strong>This breaks the French bank/address deadlock before you ever hit it.</strong> Opens in minutes from India, gives you a European IBAN, and many landlords and Free Mobile accept it. Do it before you fly — it is far harder to open once you're the person who needs it.</span></td><td class="d">before 10 Sep</td></tr><tr><td><span class="chip c-res">high</span></td><td><strong>Verify the Bajaj travel policy actually covers this trip</strong><span class="sm">Three things to confirm, not assume: that it runs the full 103 days; that it covers <strong>Iceland and the non-Schengen Balkans</strong> (Serbia, Bosnia, Montenegro), not just Schengen; and that medical cover meets the €30,000 Schengen minimum. A policy that lapses in November is worse than none, because you'll believe you're covered.</span></td><td class="d">this week</td></tr><tr><td><span class="chip c-res">high</span></td><td><strong>Book the Iceland car and the Gdańsk→Keflavík flight</strong><span class="sm">Icelandic rental stock is small and September is still shoulder-season demand. Beds you can find late; a 4×4 you cannot. Find your three car-sharers first — it halves the cost of the whole trip.</span></td><td class="d">this week</td></tr><tr><td><span class="chip c-res">high</span></td><td><strong>Buy the gear</strong><span class="sm">≈₹29,400, and every cold-weather item must be in the bag — Iceland is 25 September, ten days before you see a French shop.</span></td><td class="d">by 5 Sep</td></tr><tr><td><span class="chip c-free">med</span></td><td><strong>Reserve Paris luggage storage</strong><span class="sm">23 days, ~€150. Bounce or Nannybag near Gare de Lyon. You collect it on 3–4 Oct when Iceland lands at CDG.</span></td><td class="d">before 10 Sep</td></tr><tr><td><span class="chip c-free">med</span></td><td><strong>Passport photos × 10</strong><span class="sm">French administration consumes these — OFII, transport card, bank, gym, library. They cost ₹200 here and €10 a sheet there.</span></td><td class="d">before you fly</td></tr><tr><td><span class="chip c-free">med</span></td><td><strong>Scan everything to cloud, and carry paper</strong><span class="sm">Passport, visa, attestation, insurance, IDP, licence, ticket. Email yourself a copy. Then carry paper too — the moment you need these is the moment your phone is dead or stolen.</span></td><td class="d">before you fly</td></tr><tr><td><span class="chip c-free">med</span></td><td><strong>Bank five reels</strong><span class="sm">XR-00 plus four standalones, scheduled through early October, so the belt fortnight and Iceland publish themselves.</span></td><td class="d">by 8 Sep</td></tr></table></div>
+</section>
+
+<section>
+  <p class="sec-no">§ — First fortnight in Grenoble</p>
+  <h2>October is admin month, and one item is load-bearing</h2>
+  <p class="lede">The OFII validation is the one that quietly gates the rest of your semester — because
+  without it, the Balkans trip becomes a border problem rather than a holiday.</p>
+  <div class="scroll"><table><tr><th></th><th>From 5 October</th><th>When</th></tr><tr><td><span class="chip c-no">blocker</span></td><td><strong>Validate your visa with OFII</strong><span class="sm"><strong>Do this in your first fortnight in Grenoble.</strong> Your VLS-TS only functions as a residence permit once validated — and the Balkans trip takes you <em>out of Schengen and back in</em>. Re-entry on an unvalidated visa is where people get stopped. An online formality in October; an emergency at Belgrade airport in November.</span></td><td class="d">first 2 weeks</td></tr><tr><td><span class="chip c-res">high</span></td><td><strong>Register at GEM and confirm your courses</strong><span class="sm">Confirm the learning agreement, and get the <strong>real 2026 timetable</strong>. Everything in this OS about which weeks to miss is built on last year's pattern.</span></td><td class="d">week 1</td></tr><tr><td><span class="chip c-res">high</span></td><td><strong>Ask three questions in writing</strong><span class="sm">(1) Exact exam dates — <strong>does anything fall after 18 December?</strong> (2) Is the 17-of-20 attendance rule per course or in total? (3) Any intensive block running 7–15 Nov or 20–29 Nov? All three change the travel plan, and all three are one email.</span></td><td class="d">week 1</td></tr><tr><td><span class="chip c-res">high</span></td><td><strong>Tell your professors about November, in October</strong><span class="sm">Advance notice gets you materials, a moved deadline, or an early presentation. A retroactive email from Sarajevo gets you nothing.</span></td><td class="d">October</td></tr><tr><td><span class="chip c-free">med</span></td><td><strong>TAG transport pass, student rate</strong><span class="sm">Tram and bus, ~€25/month.</span></td><td class="d">week 1</td></tr><tr><td><span class="chip c-free">med</span></td><td><strong>Find the Indian grocers</strong><span class="sm">Grenoble first, then one bulk run to Lyon in October — free on the pass. This is what makes the food plan work for 74 days.</span></td><td class="d">week 1–2</td></tr><tr><td><span class="chip c-free">med</span></td><td><strong>Check French student health cover</strong><span class="sm">Registration at etudiant-etranger.ameli.fr is free — but processing takes weeks and your stay is 10 weeks. Worth starting; do not rely on it. <strong>Your Bajaj policy is the cover that actually matters.</strong></span></td><td class="d">week 2</td></tr><tr><td><span class="chip c-free">low</span></td><td><strong>ISIC student card</strong><span class="sm">International student ID, ~€15. Pays for itself in museum entries across Iberia and the belt alone.</span></td><td class="d">October</td></tr></table></div>
+</section>
+
+<section>
+  <p class="sec-no">§ — Deliberately not doing</p>
+  <h2>What we're skipping, and why that's the right call</h2>
+  <div class="scroll"><table><tr><th>Skipped</th><th>Reason</th></tr>
+  <tr><td><strong>Nordics, Greece, Baltics</strong></td><td>Cost, season and time. Iceland already delivers the Nordic experience; Greece in Oct–Dec is off-season with the islands shut.</td></tr><tr><td><strong>UK and Ireland</strong></td><td>Needs a separate visa on an Indian passport — ~£115 and three weeks. Great Britain <em>is</em> on your Eurail pass, so the pass isn't the blocker; the visa is. Still needs a yes or no from you.</td></tr><tr><td><strong>CAF housing benefit</strong></td><td>Takes 2–3 months to process against a 2.5-month lease. Standard advice that doesn't apply to you.</td></tr><tr><td><strong>A pressure cooker</strong></td><td>French supermarkets sell pre-cooked pulses for €1–2. The 2.8 kg is worth ~€230 more as Iceland food.</td></tr><tr><td><strong>Strasbourg Christmas markets</strong></td><td>Absorbed by the Balkans block. The genuine loss in that trade.</td></tr>
+  </table></div>
+  <div class="verdict"><p class="lab">And the three genuine unknowns</p>
+  <p><strong>1 · Exam dates.</strong> Everything assumes term ends 18 December. If an exam sits after that,
+  the December end of the plan moves.<br>
+  <strong>2 · The real 2026 timetable.</strong> The free-Monday finding, the Eco-Design intensive, the
+  Armistice week — all inferred from last year's pattern for the same six courses. Reliable for
+  <em>structure</em>, not for dates.<br>
+  <strong>3 · Who else is coming.</strong> Iceland at four sharing is €1,000 a head; alone it's €1,850. The
+  Grenoble flat at three sharing is €453/month; alone it's €1,359. <strong>The two largest lines in your
+  entire budget are both decided by how many people you find</strong>, and neither is decided yet.</p></div>
+</section>
+<footer>Photographs from Wikimedia Commons under their respective licences. Costs are per person, hostel dorms or shared rooms, booked three or more weeks ahead — planning estimates, not quotes. Rail costs are reservation fees only; the Eurail Global Pass (3-month continuous) covers the seat itself.</footer>
+</main></body></html>
